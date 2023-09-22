@@ -1,0 +1,53 @@
+.qCard {    
+    background: linear-gradient(180deg, #14DE9B, rgba(190, 255, 197, 0.3));            
+    transition: background-color 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.qCard:hover {
+    background-color: #14DE9B; /* Change to desired lighter background color on hover */
+}
+
+.qCard-content {
+    padding: 1rem;
+}
+
+.qCard-h {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.qCard-desc {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    transition: transform 0.4s;
+    transform: translateY(50%);
+}
+
+.arrow-button {
+    text-align: right;
+    transition: opacity 0.3s;
+}
+
+.qCard-img {
+    width: 100%;
+    height: auto;
+}
+
+/* Card on hover */
+.qCard:hover .qCard-img,
+.qCard:hover .arrow-button {
+    opacity: 0;
+}
+
+.qCard:hover .qCard-desc {
+    transform: translateY(0%);
+    opacity: 100%;
+}

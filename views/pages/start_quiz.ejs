@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/main.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Home page</title>
+</head>
+<style>
+    #module {
+        padding: 5%;
+        margin: 4% 0%;
+    }
+    /* input */
+    input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 20px; /* Fully rounded border */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow */
+            margin: 15px 0px;
+        }
+
+</style>
+<body>
+    <!-- Navbar -->
+    <header class="z-10">
+        <%- include ('../partials/nav.ejs') %>
+    </header>
+    <!-- Body -->
+    <div class="body">
+        <!-- Hero -->
+        <div id="module" class="card">  
+            <!-- Row -->
+            <div class="container w-full flex">
+                <!-- Heading + desc -->
+                <div class="textBox w-4/5 items-center h-3/5 flex-col">
+                    <h1 class=" text-6xl font-medium mb-5"><%=module.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %></h1>
+                    <h3 class=" text-2xl font-medium mb-5">Diagnostic Tool</h3>
+                    <p class="text-gray-400 text-base font-normal">Description goes here</p>            
+                </div>
+                <!-- Image -->
+                <div class="imgBox justify-start w-1/5">
+                    <img src="/images/Sample.png" alt="Image sample" class="w-full">
+                </div>
+            </div>
+            <!-- Start quiz button -->
+            <div class="w-full buttons mt-10 clear-both text-center">
+                <a href="/quiz/<%= module %>/start" class="px-6 py-5 mt-10 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white">Take the quiz</a>
+            </div>
+        </div>        
+
+        <!-- Disclaimer -->
+        <div class="mt-36">
+            <p><strong>*DISCLAIMER: </strong>Please be advised that this quiz is part of our research, therefore all actions and results involved in this diagnostic will be recorded</p>
+        </div>
+
+        <!-- Form -->
+        <div class="form-container">
+            <form action="/quiz/<%= module %>/start/" method="post">
+
+                <label for="first-name">First Name:</label>
+                <div class="name-input flex">
+                    <input type="text" id="first-name" name="first-name" placeholder="First Name">
+                    <input type="text" id="last-name" name="last-name" placeholder="Last Name">
+                </div>
+    
+                <label for="email-address">Email Address:</label>
+                <input type="text" id="email" name="email-address" placeholder="Email Address">
+    
+                <label for="org-name">Organisation Name:</label>
+                <input type="text" id="org-name" name="org-name" placeholder="Organisation Name">
+    
+                <label for="org-type">Organisation Type:</label>
+                <input type="text" id="org-type" name="org-type" placeholder="Organisation Type">
+    
+                <!-- Next button -->
+                <div class="w-full buttons clear-both text-center mt-5">
+                    <button type="submit" class="px-9 py-3 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white hover:tracking-widest">Next</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+</body>
+</html>
+
+<script>
+
+// Function: Create question box (div)
+const createQuestionBox = (id) =>  {
+  const cont = document.createElement("div");
+  cont.id = id;
+  cont.className = "questionbox bg-gray-200 rounded-lg p-10 m-5";
+  return cont;
+}
+
+// Function: Create question (p)
+const createQuestion = (questionText) =>  {
+  const questionParagraph = document.createElement("p");
+  questionParagraph.className = "text-gray-800 mb-4";
+  questionParagraph.textContent = questionText;
+  return questionParagraph;
+}
+
+// Function: Create option buttons group
+const createRadioButtonDiv = () => {
+  const radioContainerDiv = document.createElement("div");
+  radioContainerDiv.className = "flex items-center space-x-4";
+
+  return radioContainerDiv;
+}
+
+// Function: Create option button
+const createRadioLabel = (id, className, label, name, value) => {
+  const radioOptionLabel = document.createElement("label");
+  radioOptionLabel.setAttribute("for", id);
+  radioOptionLabel.className =  className + " inline-flex items-center";
+
+  const radioOptionInput = document.createElement("input");
+  radioOptionInput.type = "radio";
+  radioOptionInput.id = id;
+  radioOptionInput.name = name;
+  radioOptionInput.value = value;
+  radioOptionInput.className = "h-6 w-6 text-blue-600 rounded-full focus:ring-2 focus:ring-blue-400";
+
+  const radioOptionText = document.createElement("span");
+  radioOptionText.className = "ml-2";
+  radioOptionText.textContent = label;
+
+  radioOptionLabel.appendChild(radioOptionInput);
+  radioOptionLabel.appendChild(radioOptionText);
+
+  return radioOptionLabel
+}
+
+function createTextInput() {
+  // Container div 
+  const container = document.createElement('div');
+  container.classList.add('bg-gray-200', 'rounded-lg', 'm-5');
+
+  // Text input 
+  const input = document.createElement('input');
+  input.setAttribute('type', 'text');
+
+  // Append 
+  container.appendChild(input);
+
+  return container;
+}
+
+
+window.onload = () => {
+}
+    
+</script>

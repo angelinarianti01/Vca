@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/card.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Home page</title>
+</head>
+
+<style>
+
+    .double-col {
+        width: 100%;
+        display: flex;
+    }
+
+    .col {
+        display: flex;        
+        flex-direction: column;
+        justify-content: center;        
+    }
+
+    #mapCard {
+        padding: 12%;
+    }
+
+    .qCard {        
+        width: 19vw;
+        height: 60vh;
+        margin-right: 2%;
+        margin-left: 2%;
+    }
+
+    .qCard-link {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .qCard-img {
+        width: 60px;
+        height: 60px;        
+    }
+
+    p {
+        font-size: 24px;
+    }
+
+    #hero {
+        margin-top:2%;
+    }
+
+    #heroTextDiv {        
+        height: 60vh; 
+        width:55vw;        
+    }
+
+    #heroImgBox {
+        display: flex;
+        width:35vw;
+        margin-left: 4vw;
+    }
+    #heroImg {
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+    }
+
+    /* Map */
+
+    #mapCardCol {
+        width: 30vw;
+    }
+    #mapDescCol {
+        margin-left: 4vw;
+        width: 50vw;
+    }
+
+    .mapDescLiDiv {
+        display: flex;
+        border-bottom: 1px solid gray;;
+    }
+
+    .mapDescLiCol1 {
+        width: 10vw;
+    }
+
+    .mapDescLiCol2 {
+        width: 90vw;
+    }
+
+    /* Reason */
+    #reason {
+        background: linear-gradient(
+            135deg, 
+            rgba(176, 180, 255, 0.8), 
+            rgba(130, 187, 255, 0.6), 
+            rgba(179, 181, 255, 0.5), 
+            rgba(210, 255, 242, 0.4), 
+            rgba(255, 255, 255, 0.8), 
+            rgba(210, 255, 242, 0.4), 
+            rgba(179, 181, 255, 0.5), 
+            rgba(130, 187, 255, 0.6), 
+            rgba(176, 180, 255, 0.8)
+        );
+    }
+
+    .reasonImage {
+        width: 100%;
+        height: 300px;
+    }
+
+</style>
+
+<body>
+    <!-- Navbar -->
+    <header class="">
+        <%- include ('../partials/nav.ejs') %>
+    </header>
+
+    <!-- Gradient Background -->
+    <div class="blob w-[800px] h-[800px] rounded-[999px] absolute top-0 right-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200"></div>
+    <div class="blob w-[1000px] h-[1000px] rounded-[999px] absolute bottom-0 left-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-red-200 via-gray-100 to-blue-100"></div>
+    <div class="blob w-[600px] h-[600px] rounded-[999px] absolute bottom-0 left-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-slate-100 via-teal-100 to-blue-100"></div>
+    <div class="blob w-[300px] h-[300px] rounded-[999px] absolute bottom-[-10px] left-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-green-200 via-cyan-200 to-Fuchsia-300"></div>
+
+    <!-- Body -->
+    <div class="body">
+        <!-- Hero Section -->
+        <div id="hero" class="double-col">    
+            <div id="heroTextDiv" class="col">
+                <h1 class="text-6xl font-medium mb-5">Circular Economy Stuffs <br>Mood Up</h1>
+                <p class="text-base font-normal">Description goes here</p>
+
+                <!-- Start quiz button -->
+                <div class="w-full buttons mt-10 clear-both">
+                    <a href="#" class="px-6 py-5 mt-10 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white">Take the quiz</a>
+                </div>
+            </div>
+            
+            <div id="heroImgDiv" class="">
+                <img id="heroImg" src="/images/Sample.png" alt="Image sample" class="h-80 w-full">
+            </div>
+        </div>
+
+        <!-- What is CE-Map -->
+        <div class="double-col">
+            <!-- Card -->
+            <div id="mapCardCol" class="col">
+                <div id="mapCard" class="card">
+                    <p class="text-slate-900 text-4xl mb-2 font-bold">What is Emerging Pioneer ?</p>
+                    <p class="mt-10 text-slate-900 text-sm mx-auto">Don't mistake this love language for materialism; the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift. If you speak this love language, the perfect gift or gesture shows that you are known, you are cared for, and you are prized above whatever was sacrificed to bring the gift to you.Don't mistake this love language for materialism; the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift. </p>
+                </div>
+            </div>
+            <!-- Benefits -->
+            <div id="mapDescCol" class="col">
+                <div class="mapDescLiDiv">
+                    <div class="col mapDescLiCol1">
+                        <img class="mapDescLiIcon" src="/images/Sample.png" alt="Image sample">
+                    </div>
+                    <div class="col mapDescLiCol2">
+                        <p>hello</p>
+                        <p>hello desc</p>
+                    </div>
+                </div>            
+            </div>            
+        </div>
+
+        <!-- Choose a quiz -->
+        <div id="quiz">
+            <!-- heading -->
+            <div class="quizHeading mt-10 text-center">
+                <h1 class="text-slate-900 text-6xl font-medium">Choose a quiz</h1>            
+            </div>
+            <!-- cards -->
+            <div class="card-container flex justify-center mt-10">
+                <!-- Enabling Environment -->
+                <div class="card qCard">      
+                    <a class="qCard-link" href="/quiz/enabling_environment">                 
+                        <p class="qCard-h text-white">Enabling Environment</p>
+                        <p class="qCard-desc text-white">Description goes here...</p>
+                        <img src="/images/Sample.png" alt="Image 1" class="qCard-img">
+                        <div class="arrow-button text-white">&#8594;</div>
+                    </a>
+                </div>
+                <!-- Market Creation -->
+                <div class="card qCard">      
+                    <a class="qCard-link" href="/quiz/market_creation">                      
+                        <p class="qCard-h text-white">Market Creation</p>
+                        <p class="qCard-desc text-white">Description goes here...</p>
+                        <img src="/images/Sample.png" alt="Image 1" class="qCard-img">
+                        <div class="arrow-button text-white">&#8594;</div>
+                    </a>
+                </div>
+                <!-- Organisational Change -->
+                <div class="card qCard">      
+                    <a class="qCard-link" href="/quiz/organisational_change">                      
+                        <p class="qCard-h text-white">Organisational Change</p>
+                        <p class="qCard-desc text-white">Description goes here...</p>
+                        <img src="/images/Sample.png" alt="Image 1" class="qCard-img">
+                        <div class="arrow-button text-white">&#8594;</div>
+                    </a>
+                </div>
+                <!-- All -->
+                <div class="card qCard">                            
+                    <a class="qCard-link" href="/quiz/all">
+                        <p class="qCard-h text-white">Combination</p>
+                        <p class="qCard-desc text-white">Description goes here...</p>
+                        <img src="/images/Sample.png" alt="Image 1" class="qCard-img">
+                        <div class="arrow-button text-white">&#8594;</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Different color: Why take the quiz -->
+    <div id="reason" class="mt-10">     
+        <!-- Padding -->
+        <div class="body">
+            <!-- Heading  -->
+            <div class="textBox text-center">
+               <h1 class="text-6xl font-medium mb-5">Why take this quiz</h1>
+            </div>
+            <!-- Stacks -->
+            <div id="reason-stack" class="mt-10">
+                <!-- First stack -->
+                <div class= "flex">
+                    <div class="w-1/2">
+                        <p class="text-base font-normal">Description goes here</p>                
+                    </div>
+                    <div class="col w-1/2">
+                        <img src="/images/Sample.png" alt="Image sample" class="reasonImage">
+                    </div>
+                </div>     
+                <!-- Second stack -->
+                <div class= "flex">
+                    <div class="col w-1/2">
+                        <img src="/images/Sample.png" alt="Image sample" class="reasonImage">
+                    </div>
+                    <div class="w-1/2">
+                        <p class="text-base font-normal">Description goes here</p>                
+                    </div>
+                </div>             
+                <!-- Third stack -->
+                <div class= "flex">
+                    <div class="w-1/2">
+                        <p class="text-base font-normal">Description goes here</p>                
+                    </div>
+                    <div class="col w-1/2">
+                        <img src="/images/Sample.png" alt="Image sample" class="reasonImage">
+                    </div>
+                </div>      
+            </div>
+        </div>
+  </div>
+</body>
+</html>

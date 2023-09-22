@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/main.css">    
+    <script src="https://cdn.tailwindcss.com"></script>    
+    <title>Quiz page</title>
+</head>
+<style>
+
+label {
+    columns: red;
+}
+
+.card {
+    padding: 5%;
+}
+
+</style>
+<body>
+    <!-- Navbar -->
+    <header class="z-10">
+        <%- include ('../partials/nav.ejs') %>
+    </header>
+
+    <!-- Progress bar -->
+    <div class="w-full bg-gray-200 h-4 flex items-center">
+        <div id="pb" class="bg-[#8BA9AD] h-full rounded-r-lg transition-all ease-out duration-1000"></div>
+        <span id="pb-label" class="-ml-10 text-xs text-black font-medium"></span>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+        <!-- Quiz -->    
+        <form id="quiz" <% if (modules.length>1) { %>action="/result/all"<% } else { %>action="/result"<% } %> method="post">
+            <!-- Hidden input: Which module -->
+            <input type="hidden" name="modules" value="<%= JSON.stringify(modules) %>">  
+            <input type="hidden" name="userData" value="<%= JSON.stringify(userData) %>">  
+
+            <!-- Submit button -->
+            <div id="submit" class="w-full buttons clear-both text-center mt-10">
+                <button type="submit" class="px-9 py-3 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white hover:tracking-widest">See your result</a>
+            </div>
+        </form>
+    </div>
+      
+</body>
+</html>
+
+<script type='text/javascript'> 
+
+// Retrieve data from server
+let modules = JSON.parse('<%= JSON.stringify(modules) %>'.replace(/&#34;/g, '"'));
+let data = JSON.parse('<%= JSON.stringify(data) %>'.replace(/&#34;/g, '"'));
+
+console.log(modules);
+
+// Set progress bar
+let pb = document.getElementById('pb')
+pb.style.width = '0%';
+let pbl = document.getElementById('pb-label')
+pbl.innerText = '0%';
+
+// Function: Set progress bar width
+const setProgressBar = (currentQ, totalQ) => {
+    const progressPercentage = currentQ / totalQ * 100
+    pb.style.width = `${parseInt(progressPercentage)}%`
+    pbl.innerText = `${parseInt(progressPercentage)}%`
+}
+
+// Function: Create module box
+const createModuleBox = (id, heading) => {
+    const cont = document.createElement("div");
+    cont.id = id;
+    cont.className = "modulebox";
+
+    const h2 = document.createElement("h2");
+    h2.textContent = heading;
+    // Heading style here
+    cont.appendChild(h2);
+
+    return cont;
+}
+
+// Function: Create question box (div)
+const createQuestionBox = (id) =>  {
+  const cont = document.createElement("div");
+  cont.id = id;
+  cont.className = "card mt-5";
+  return cont;
+}
+
+const createSubQuestionBox = (id) =>  {
+  const cont = document.createElement("div");
+  cont.id = id;
+  cont.className = "";
+  return cont;
+}
+
+// Function: Create question (p)
+const createQuestion = (questionText) =>  {
+  const questionParagraph = document.createElement("p");
+  questionParagraph.className = "text-gray-800 my-4";
+  questionParagraph.textContent = questionText;
+  return questionParagraph;
+}
+
+// Function: Create option buttons group
+const createRadioButtonDiv = () => {
+  const radioContainerDiv = document.createElement("div");
+  radioContainerDiv.className = "radio-container flex items-center space-x-4";
+
+  return radioContainerDiv;
+}
+
+// Function: Create option button
+const createRadioLabel = (id, className, label, name, value) => {
+  const radioOptionLabel = document.createElement("label");
+  radioOptionLabel.setAttribute("for", id);
+  radioOptionLabel.className =  className + " radio-button inline-flex items-center";
+
+  const radioOptionInput = document.createElement("input");
+  radioOptionInput.type = "radio";
+  radioOptionInput.id = id;
+  radioOptionInput.name = name;
+  radioOptionInput.value = value;
+  radioOptionInput.className = "h-6 w-6 text-blue-600 rounded-full focus:ring-2 focus:ring-blue-400";
+
+  const radioOptionText = document.createElement("span");
+  radioOptionText.className = "ml-2";
+  radioOptionText.textContent = label;
+
+  radioOptionLabel.appendChild(radioOptionInput);
+  radioOptionLabel.appendChild(radioOptionText);
+
+  return radioOptionLabel
+}
+
+window.onload = function() {
+    console.log('Page has fully loaded');
+    
+    // Get container
+    const quiz = document.getElementById('quiz');
+    
+    // Loop through modules
+    modules.forEach(m => {
+        // Create module
+        let moduleBox = createModuleBox(m.id, m.name);
+        
+        // Insert
+        const submit = document.getElementById('submit');
+
+        quiz.insertBefore(moduleBox, submit);
+    })
+
+    // Loop through questions
+    data.forEach( (q,i) => {
+        // Init question box
+        let qBox = createQuestionBox(q.id);
+      
+        // Create question
+        qBox.appendChild(createQuestion(q.question));
+
+        // Create options
+        let radioButtonsGroup = createRadioButtonDiv();
+        
+        // Loop through options
+        q.q_options.forEach(o => {
+            // Create option label                
+            radioButtonsGroup.appendChild(createRadioLabel(o.id, 'qOptions', o.option, q.id, JSON.stringify(o)))            
+        })
+
+        // Append to box
+        qBox.appendChild(radioButtonsGroup);
+    
+        // Append to module container        
+        const module = document.getElementById(q.module);
+        module.appendChild(qBox);
+        
+        // Loop through options
+        q.q_options.forEach(o => {
+            // Get elements
+            let option = document.getElementById(o.id);
+            let text = option.parentNode.querySelector('span').textContent;            
+            
+            // Add listener
+            option.addEventListener('click', () => {
+                // Get sq box
+                let sqBox = document.getElementById('sqbox' + q.id)
+                
+                // If selected is yes and no sq is initialised
+                if (text == 'yes' && !qBox.contains(sqBox)) {
+
+                    // Init sq box
+                    sqBox = createSubQuestionBox('sqbox' + q.id);    
+     
+                    // Loop throgh sub questions
+                    q.sub_questions.forEach(sq => {
+                        // Append sub questions
+                        sqBox.appendChild(createQuestion(sq.sub_question));
+                        // Create options
+                        let radioButtonsGroup = createRadioButtonDiv();
+                        // Loop through sub options
+                        q.sq_options.forEach(sqo => {
+                            // Create option label
+                            radioButtonsGroup.appendChild(createRadioLabel(sqo.id, 'sqOptions', sqo.option, sq.id, JSON.stringify(sqo)));            
+                        })
+                        // Append to sq box
+                        sqBox.appendChild(radioButtonsGroup);       
+                    })
+                    
+                    // Append to q box
+                    qBox.appendChild(sqBox);      
+                }
+
+                // If no is selected and sq is initialised
+                else if (text == 'no' && qBox.contains(sqBox)) { // 
+                    // Remove sq
+                    qBox.removeChild(sqBox)
+                }
+
+                // Set progress bar
+                setProgressBar(i+1, data.length);
+
+            })  
+        })
+    })
+};
+</script>

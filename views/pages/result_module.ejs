@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="/style/main.css"> -->
+    <link rel="stylesheet" href="/style/card.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="/js/script.js"></script>
+    <title>Quiz page</title>
+</head>
+
+<style>
+    .body {
+        padding:12% 15%;
+    }
+    .card {        
+        background: #FFFFFF;
+        border-radius: 25px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+    .m-result {
+        width: 30%;
+        padding: 3%;
+        margin: 0% 3%;
+    }
+
+    #hrc {
+        margin-bottom: -12%;
+    }
+
+    #tips {
+        padding: 5%;
+        margin: 4% 0%;
+    }
+
+</style>
+
+<body>
+    <!-- Navbar -->
+    <header class="z-10">
+        <%- include ('../partials/nav.ejs') %>
+    </header>
+    <!-- Body -->
+    <div class="body">
+        <!-- Module -->
+        <div class="w-full mx-auto bg-white">
+            <!-- Text -->
+            <div class="textBox text-center">
+                <p class="text-slate-900 text-4xl mb-2">Your <strong><%= module.name %></strong></p>
+                <p class="text-slate-900 text-4xl">score is:</p>
+            </div>
+            <!-- Half radial chart -->
+            <div id="hrc" class=""></div>
+            <!-- Cards -->
+            <div id="module-graphs" class="flex justify-center">
+                <% for (q in scores.qScores) { %>
+                    <!-- card -->
+                    <div id="card-<%= q %>" class="card m-result text-center">
+                        <!-- radial bar -->
+                        <div id="rb-<%= q %>"></div>
+                        <!-- heading -->
+                        <p class="text-slate-900 text-1xl font-medium mx-auto"><%= scores.qScores[q].topic %></p>
+                        <!-- resutl -->
+                        <p class="text-slate-900 text-sm mx-auto"><%= cat[scores.qScores[q].label]['label'] %></p>
+                    </div>                    
+                <% }; %>
+                
+            </div>
+        </div>
+    
+        <!-- Desciption -->
+        <div class="mt-16">
+            <p class="text-slate-900 text-sm mx-auto">Don't mistake this love language for materialism; the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift. If you speak this love language, the perfect gift or gesture shows that you are known, you are cared for, and you are prized above whatever was sacrificed to bring the gift to you.Don't mistake this love language for materialism; the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift. </p>
+        </div>
+
+        <!-- Tips -->
+        <div id="tips" class="card tips">
+            <!-- heading -->
+            <p class="text-slate-900 text-1xl font-medium mx-auto">Steps to Improve your Financial Mechanism !</p>
+            <!-- list of tips -->
+            <p>Don't mistake this love language for materialism: </p>
+            <ol class="list-decimal">
+                <li>the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift</li>
+                <li>the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift</li>
+                <li>the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift</li>
+            </ol>            
+        </div>
+
+        <!-- Question Details Dropdown -->
+        <div class="q-details">
+            <!-- Dropdown -->
+            <div class="border-gray-200 border-b">
+                <button data-collapse-toggle="more-details2" type="button" class="text-lg text-black font-medium inline-flex w-full justify-between py-6">
+                    <!-- Question topic -->                    
+                    <span class="inline-flex items-cente">
+                        <span class="mr-2">Customer Engagement</span>
+                        <span class="mr-2">icon</span>
+                    </span>
+                    <!-- Dropdown button -->
+                    <span class="">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </span>
+                </button>
+                <!-- Details -->
+                <div id="more-details2" class="pt-3 mt-3 space-y-2 hidden">
+                  <p class="d2-heading text-center">You are doing meh</p>
+                  <div id="d2-pb"></div>
+                  <p id="d2-desc">Here is how to improve</p>
+                </div>
+              </div>
+        </div>
+
+        <!-- button -->
+        <div class="buttons mt-10 text-center">
+            <a href="#" class="px-6 py-5 mt-10 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white">
+                Go back to home
+            </a>
+        </div>
+        
+    </div>
+</body>
+</html>
+
+<script type='text/javascript'> 
+// Retrieve data from server
+let module = '<%= module %>';
+let data = JSON.parse('<%= JSON.stringify(data) %>'.replace(/&#34;/g, '"'));
+let scores = JSON.parse('<%= JSON.stringify(scores) %>'.replace(/&#34;/g, '"'));
+let cat = JSON.parse('<%= JSON.stringify(cat) %>'.replace(/&#34;/g, '"'));
+console.log(module);
+console.log(data);
+console.log(scores);
+
+
+window.onload = function() {    
+    // Make sure apex chart is imported
+    if (typeof ApexCharts == 'undefined') {
+        return;
+    }
+    
+    // Questions result -> Radial chart
+    for (q in scores.qScores) {
+        let qScore =  scores.qScores[q];
+        let label = qScore.label
+        let scorePercent = parseInt(qScore.score/qScore.maxScore * 100)
+        insertRadialChart(`rb-${q}`, cat[label]['label'], cat[label]['color'], cat[label]['color2'], '180px', '50%', '#ffffff', scorePercent)
+    }
+
+    // Module result -> Half radial chart  
+    let mScore = scores.mScore;
+    let maxScore = 6; 
+    let mScorePercentage = parseInt(mScore/maxScore*100);
+    insertHalfRadialChart('hrc', cat[mScore]['label'], cat[mScore]['color'], cat[mScore]['color2'], '100%', '50%', mScorePercentage)
+
+    // Progress bar chart    
+    document.getElementById('d2-pb').appendChild(createProgressChart())
+}
+</script>
