@@ -202,8 +202,9 @@ app.post('/result/all', async (req, res) => {
     
     // Insert to overall
     insertRowToExcel('./data/result.xlsx', 'all', {
+        ...userData,
         'mc_result': mc_result,
-        'oc_score': oc_result,
+        'oc_result': oc_result,
         'business_category': business_category
     }) 
 
