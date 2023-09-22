@@ -1,10 +1,9 @@
 // Imports
 const express = require('express')
 const bodyParser = require('body-parser');
-const market_creation = require('./data/market_creation');
-const fs = require('fs').promises;
 const app = express()
 const port = 5000
+const path = require('path');
 
 const { conditionalFetchCell, jsonConditionalFetchCell, conditionalFetchRows, conditionalFetchRow, postModuleResult, insertRowToExcel, twoConditionalFetchCell } = require('./data')
 
@@ -202,11 +201,11 @@ app.post('/result/all', async (req, res) => {
     let business_category = await twoConditionalFetchCell('./data/scoring.xlsx', 'final_result', 'mc', mc_result, 'oc', oc_result, 'business_categories')
     
     // Insert to overall
-    // insertRowToExcel('./data/result.xlsx', 'all', {
-    //     'mc_result': mScores.mc,
-    //     'oc_score': mScores.oc,
-    //     'business_category': business_category
-    // }) 
+    insertRowToExcel('./data/result.xlsx', 'all', {
+        'mc_result': mc_result,
+        'oc_score': oc_result,
+        'business_category': business_category
+    }) 
 
 
     console.log('business category is')
@@ -249,7 +248,23 @@ app.post('/result', async (req, res) => {
     
     res.render('pages/result_module', { module: module, data: data, scores: scores, cat: cat})
 })
-// 5. Test page
+// Get csv result
+app.get('/result/excel', (req,res) => {
+    console.log(req)
+    const filePath = path.join(__dirname, 'data', 'result.xlsx');
+
+    // Send the file as a response
+  res.sendFile(filePath, (err) => {
+    if (err) {
+        // Handle errors, such as the file not existing
+        console.error(err);
+        res.status(err.status || 500).send('File not found');
+    } else {
+        console.log('File sent successfully')        
+    }
+  });
+});
+// Test page
 app.get('/test', (req, res) => {
     res.render('test3', { text: 'Hey' })
 })
@@ -287,7 +302,7 @@ const scoreAndSave = async(module, data, userData) => {
     console.log(insertRow)
 
     // Insert to result excel
-    // insertRowToExcel('./data/result.xlsx', moduleSheet, insertRow) 
+    insertRowToExcel('./data/result.xlsx', moduleSheet, insertRow) 
     
 
     return {qScores, mScore};

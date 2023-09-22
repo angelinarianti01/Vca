@@ -6,16 +6,14 @@
         <li class="menu">
             <a href="/" class="">Home</a>
         </li>
-        <li class="menu">
-            <a href="about" class="">About Us</a>
-        </li>
         <li id="quizMenu" class="menu">
             <a href="quiz" class="">Quiz</a>         
             <!-- Subnav -->
             <div class="subNav">
-                <a href="#">Subnav Item 1</a>
-                <a href="#">Subnav Item 2</a>
-                <a href="#">Subnav Item 3</a>
+                <a href="/quiz/enabing_environment">Enabling Environment</a>
+                <a href="/quiz/market_creation">Market Creation</a>
+                <a href="/quiz/organisational_change">Organisational Change</a>
+                <a href="/quiz/organisational_change">All</a>
             </div>    
         </li>        
         <li class="menu">
@@ -45,12 +43,13 @@
         list-style: none;
         display: flex;
         justify-content:center;
+        text-align: center;
         height: 100%;
     }
     /* Menu */
     .menu {    
         padding: 15px 30px;
-        margin: 0px 30px;
+        width: 200px;
     }
 
     .menu a {
@@ -74,8 +73,7 @@
         z-index: 1;
         border: 1px solid white;
         border-radius: 25px;
-        border-top: none;
-        padding: 15px 30px;
+        border-top: none;        
         margin-top: 3%;
     }
 
@@ -88,15 +86,26 @@
 
     /* Additional hover styles for subnav items */
     .subNav a:hover {
-        background-color: #f0f0f0;
+        color: #fff;
+        background: linear-gradient(
+            135deg, 
+            rgba(45, 98, 234, 1), 
+            rgba(72, 117, 233, 1)
+        );
+        width: 100%;
+
     }
 
+    .subNav a:last-child:hover {
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+    }
 
     /* Show subnav on hover */
     #quizMenu:hover .subNav {
         display: block;        
         border-top-right-radius: 0;
-        border-top-left-radius: 0;
+        border-top-left-radius: 0;                
     }
 
     #quizMenu:hover {

@@ -92,13 +92,14 @@
         </div>
 
         <!-- Question Details Dropdown -->
+        <% for (q in scores.qScores) { %>
         <div class="q-details">
             <!-- Dropdown -->
             <div class="border-gray-200 border-b">
-                <button data-collapse-toggle="more-details2" type="button" class="text-lg text-black font-medium inline-flex w-full justify-between py-6">
+                <button data-collapse-toggle="more-details-<%= q %>" type="button" class="text-lg text-black font-medium inline-flex w-full justify-between py-6">
                     <!-- Question topic -->                    
                     <span class="inline-flex items-cente">
-                        <span class="mr-2">Customer Engagement</span>
+                        <span class="mr-2"><%= scores.qScores[q].topic %></span>
                         <span class="mr-2">icon</span>
                     </span>
                     <!-- Dropdown button -->
@@ -109,13 +110,14 @@
                     </span>
                 </button>
                 <!-- Details -->
-                <div id="more-details2" class="pt-3 mt-3 space-y-2 hidden">
-                  <p class="d2-heading text-center">You are doing meh</p>
+                <div id="more-details-<%= q %>" class="pt-3 mt-3 space-y-2 hidden">
+                  <p class="d2-heading text-center">in this case, you are emerging</p>
                   <div id="d2-pb"></div>
-                  <p id="d2-desc">Here is how to improve</p>
+                  <p id="d2-desc">Here is how to improve:</p>
                 </div>
               </div>
         </div>
+        <% }; %>
 
         <!-- button -->
         <div class="buttons mt-10 text-center">
@@ -160,6 +162,6 @@ window.onload = function() {
     insertHalfRadialChart('hrc', cat[mScore]['label'], cat[mScore]['color'], cat[mScore]['color2'], '100%', '50%', mScorePercentage)
 
     // Progress bar chart    
-    document.getElementById('d2-pb').appendChild(createProgressChart())
+    // document.getElementById('d2-pb').appendChild(createProgressChart())
 }
 </script>
