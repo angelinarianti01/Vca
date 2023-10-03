@@ -1,3 +1,22 @@
+:root {
+    /* Blue */
+    --dark-blue: RGB(34, 55, 95);
+    --medium-blue: RGB(55, 99, 165);
+    --light-blue: RGB(131, 178, 255);
+    --bright-blue: RGB(48,102,241);
+    --dove-blue: RGB(98,123,188);
+    /* Red */
+    --dark-red: RGB(255, 90, 54);
+    --light-red: RGB(255, 162, 146);
+    /* Yellow */
+    --dark-yellow: RGB(255, 197, 46);
+    --light-yellow: RGB(255, 237, 94);
+    /* Green */
+    --dark-green: RGB(0, 220, 36);
+    --light-green: RGB(0, 220, 36);
+    /* Others */
+    --grey: RGB(238, 240, 244);
+}
 
 html {
     scroll-behavior: smooth;
@@ -5,8 +24,70 @@ html {
 .body {
     padding:5% 10%;
 }
+.padded {
+    padding:10% 10%;
+}
 .card {        
     background: #FFFFFF;
     border-radius: 25px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
 }
+
+/* Column */
+.double-col {
+    width: 100%;
+    display: flex;
+}
+
+.col {
+    display: flex;        
+    flex-direction: column;
+    justify-content: center;        
+}
+
+/* Text */
+h1 {
+    font-size: 4rem;
+    font-weight: 500;    
+    color: var(--dark-blue);
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 500;    
+}
+
+h4 {
+    font-size: 1.5rem;
+    font-weight: 500;    
+}
+
+p {
+    font-size: 1.1em;
+    font-weight: 200;
+}
+
+.blue-text {
+    color: var(--dark-blue);
+}
+
+/* Button */
+.button {
+    border-radius: 50px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    box-shadow: 2px 2px 5px black;
+}
+
+.button:hover {
+    box-shadow: inset 2px 2px 5px 0px black;
+}
+
+.button a {
+    font-size: 1.25em;
+    font-weight: 500;
+}
+
+
+/*  px-6 py-5 mt-10 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white */

@@ -10,28 +10,18 @@
     <title>Home page</title>
 </head>
 
-<style>
+<style>    
 
-    .double-col {
-        width: 100%;
-        display: flex;
-    }
-
-    .col {
-        display: flex;        
-        flex-direction: column;
-        justify-content: center;        
-    }
-
-    #mapCard {
-        padding: 12%;
+    #quiz{
+        background: linear-gradient(to top, var(--dark-blue) 60%, var(--medium-blue));  
     }
 
     .qCard {        
         width: 19vw;
         height: 60vh;
-        margin-right: 2%;
-        margin-left: 2%;
+        margin-right: 1%;
+        margin-left: 1%;
+        padding: 2%;
     }
 
     .qCard-link {
@@ -46,41 +36,44 @@
         height: 60px;        
     }
 
-    p {
-        font-size: 24px;
-    }
-
+    /* Hero */
+    
     #hero {
-        margin-top:2%;
+        background: linear-gradient(to bottom, var(--dark-blue) 30%, var(--medium-blue));  
     }
 
     #heroTextDiv {        
         height: 60vh; 
-        width:55vw;        
+        width:50%;        
     }
 
-    #heroImgBox {
+    #heroImgDiv {
         display: flex;
-        width:35vw;
-        margin-left: 4vw;
+        justify-content: center;
+        align-items: center;
+        width:50%;
     }
     #heroImg {
-        border-bottom-left-radius: 30px;
-        border-bottom-right-radius: 30px;
+        border-radius: 30px;
+        width: 70%;
+        height: fit-content;
     }
 
     /* Map */
 
-    #mapCardCol {
-        width: 30vw;
+    #mapCard {
+        padding: 12%;
     }
+
     #mapDescCol {
-        margin-left: 4vw;
+        margin-left: 2%;
         width: 50vw;
     }
 
     .mapDescLiDiv {
         display: flex;
+        padding-top: 3%;
+        padding-bottom: 3%;
         border-bottom: 1px solid gray;;
     }
 
@@ -92,25 +85,30 @@
         width: 90vw;
     }
 
+    .mapDescLiIcon {
+        width: 45px;
+    }
+
     /* Reason */
     #reason {
         background: linear-gradient(
             135deg, 
-            rgba(176, 180, 255, 0.8), 
-            rgba(130, 187, 255, 0.6), 
-            rgba(179, 181, 255, 0.5), 
-            rgba(210, 255, 242, 0.4), 
-            rgba(255, 255, 255, 0.8), 
-            rgba(210, 255, 242, 0.4), 
-            rgba(179, 181, 255, 0.5), 
-            rgba(130, 187, 255, 0.6), 
-            rgba(176, 180, 255, 0.8)
+            var(--light-blue), 
+            var(--light-blue), 
         );
+    }
+
+    .reasonImageDiv, .reasonTextDiv{
+        padding: 1%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .reasonImage {
         width: 100%;
         height: 300px;
+        border-radius: 30px;        
     }
 
 </style>
@@ -127,92 +125,104 @@
     <div class="blob w-[600px] h-[600px] rounded-[999px] absolute bottom-0 left-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-slate-100 via-teal-100 to-blue-100"></div>
     <div class="blob w-[300px] h-[300px] rounded-[999px] absolute bottom-[-10px] left-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-green-200 via-cyan-200 to-Fuchsia-300"></div>
 
-    <!-- Body -->
-    <div class="body">
-        <!-- Hero Section -->
-        <div id="hero" class="double-col">    
-            <div id="heroTextDiv" class="col">
-                <h1 class="text-6xl font-medium mb-5">Circular Economy Stuffs <br>Mood Up</h1>
-                <p class="text-base font-normal">Description goes here</p>
+    <!-- Hero Section -->
+    <div id="hero" class="double-col padded">    
+        <div id="heroTextDiv" class="col">
+            <h1 class="text-white">Innovate, transform and thrive through circular solutions !</h1>
+            <p class="text-white mt-5">The CE-MAP diagnostics tool empowers your organisation to embrace sustainability, fostering growth and resilience. Discover untapped opportunities, drive change, and gain a competitive edge in today’s market.</p>
 
-                <!-- Start quiz button -->
-                <div class="w-full buttons mt-10 clear-both">
-                    <a href="#quiz" class="px-6 py-5 mt-10 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white">Take the quiz</a>
-                </div>
-            </div>
-            
-            <div id="heroImgDiv" class="">
-                <img id="heroImg" src="/images/Sample.png" alt="Image sample" class="h-80 w-full">
+            <!-- Start quiz button -->        
+            <a class="button w-1/2 bg-white mt-10" href="#quiz" class="blue-text">Take the quiz</a>
+        </div>
+        
+        <div id="heroImgDiv" class="col">
+            <img id="heroImg" src="/images/Sample.png" alt="Image sample" class="h-80 w-full">
+        </div>
+    </div> 
+
+    <!-- What is CE-Map -->
+    <div class="double-col padded">
+        <!-- Card -->
+        <div id="" class="col w-2/5">
+            <div id="mapCard" class="card">
+                <h2 class="">What is Emerging Pioneer ?</h2>
+                <p class="">Don't mistake this love language for materialism; the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift. If you speak this love language, the perfect gift or gesture shows that you are known, you are cared for, and you are prized above whatever was sacrificed to bring the gift to you.Don't mistake this love language for materialism; the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift. </p>
             </div>
         </div>
-
-        <!-- What is CE-Map -->
-        <div class="double-col">
-            <!-- Card -->
-            <div id="mapCardCol" class="col">
-                <div id="mapCard" class="card">
-                    <p class="text-slate-900 text-4xl mb-2 font-bold">What is Emerging Pioneer ?</p>
-                    <p class="mt-10 text-slate-900 text-sm mx-auto">Don't mistake this love language for materialism; the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift. If you speak this love language, the perfect gift or gesture shows that you are known, you are cared for, and you are prized above whatever was sacrificed to bring the gift to you.Don't mistake this love language for materialism; the receiver of gifts thrives on the love, thoughtfulness, and effort behind the gift. </p>
+        <!-- Benefits -->
+        <div id="mapDescCol" class="col w-3/5">
+            <!-- Benefit 1 -->
+            <div class="mapDescLiDiv">
+                <div class="mapDescLiCol1">
+                    <img class="mapDescLiIcon" src="/icons/progress_assesment.svg" alt="Image sample">
                 </div>
-            </div>
-            <!-- Benefits -->
-            <div id="mapDescCol" class="col">
-                <div class="mapDescLiDiv">
-                    <div class="col mapDescLiCol1">
-                        <img class="mapDescLiIcon" src="/images/Sample.png" alt="Image sample">
-                    </div>
-                    <div class="col mapDescLiCol2">
-                        <p>hello</p>
-                        <p>hello desc</p>
-                    </div>
-                </div>            
-            </div>            
+                <div class="col mapDescLiCol2">
+                    <h4 class="blue-text">Progress Assessment</h4>
+                    <p>With CE-MAP, you can measure your organisation's progress, assess your impact, and chart the pathways to a circular economy. It's about making real-world changes, from reducing waste and pollution to designing products that last longer and benefit everyone.</p>
+                </div>
+            </div> 
+            <!-- Benefit 2 -->
+            <div class="mapDescLiDiv">
+                <div class="mapDescLiCol1">
+                    <img class="mapDescLiIcon" src="/icons/inclusiveness.svg" alt="Image sample">
+                </div>
+                <div class="col mapDescLiCol2">
+                    <h4 class="blue-text">Inclusiveness</h4>
+                    <p>CE-MAP isn't just for businesses. It's for all stakeholders. It helps governments create policies that support circular practices, communities build sustainable systems, and organisations make choices that reduce their environmental footprint.</p>
+                </div>
+            </div>    
+            <!-- Benefit 3 -->
+            <div class="mapDescLiDiv">
+                <div class="mapDescLiCol1">
+                    <img class="mapDescLiIcon" src="/icons/environment_solution.svg" alt="Image sample">
+                </div>
+                <div class="col mapDescLiCol2">
+                    <h4 class="blue-text">Environmental Solutions</h4>
+                    <p>In a world facing pressing environmental challenges, CE-MAP provides a clear and actionable plan for a better tomorrow. It's a journey towards a circular economy where resources are used efficiently, waste is minimised, and everyone can enjoy the benefits of a sustainable future.</p>
+                </div>
+            </div>               
+        </div>            
+    </div>
+
+     <!-- Choose a quiz -->
+     <div id="quiz" class="padded">
+        <!-- heading -->
+        <div class="text-center">
+            <h1 class="text-white">Choose a quiz</h1>            
         </div>
-
-        <!-- Choose a quiz -->
-        <div id="quiz">
-            <!-- heading -->
-            <div class="quizHeading mt-10 text-center">
-                <h1 class="text-slate-900 text-6xl font-medium">Choose a quiz</h1>            
+        <!-- cards -->
+        <div class="card-container flex justify-center mt-10">
+            <!-- Enabling Environment -->
+            <div id="card-ee" class="card qCard">      
+                <a class="qCard-link" href="/quiz/enabling_environment">                 
+                    <h2 class="qCard-h text-white">Enabling Environment</h2>
+                    <p class="qCard-desc text-white">Assess the broader factors and conditions that support or hinder the transition to a circular economy, such as policies, regulations, and funding.</p>
+                    <div class="arrow-button text-white">&#8594;</div>
+                </a>                
             </div>
-            <!-- cards -->
-            <div class="card-container flex justify-center mt-10">
-                <!-- Enabling Environment -->
-                <div class="card qCard">      
-                    <a class="qCard-link" href="/quiz/enabling_environment">                 
-                        <p class="qCard-h text-white">Enabling Environment</p>
-                        <p class="qCard-desc text-white">Description goes here...</p>
-                        <img src="/images/Sample.png" alt="Image 1" class="qCard-img">
-                        <div class="arrow-button text-white">&#8594;</div>
-                    </a>
-                </div>
-                <!-- Market Creation -->
-                <div class="card qCard">      
-                    <a class="qCard-link" href="/quiz/market_creation">                      
-                        <p class="qCard-h text-white">Market Creation</p>
-                        <p class="qCard-desc text-white">Description goes here...</p>
-                        <img src="/images/Sample.png" alt="Image 1" class="qCard-img">
-                        <div class="arrow-button text-white">&#8594;</div>
-                    </a>
-                </div>
-                <!-- Organisational Change -->
-                <div class="card qCard">      
-                    <a class="qCard-link" href="/quiz/organisational_change">                      
-                        <p class="qCard-h text-white">Organisational Change</p>
-                        <p class="qCard-desc text-white">Description goes here...</p>
-                        <img src="/images/Sample.png" alt="Image 1" class="qCard-img">
-                        <div class="arrow-button text-white">&#8594;</div>
-                    </a>
-                </div>
-                <!-- All -->
-                <div class="card qCard">                            
-                    <a class="qCard-link" href="/quiz/all">
-                        <p class="qCard-h text-white">Combination</p>
-                        <p class="qCard-desc text-white">Description goes here...</p>
-                        <img src="/images/Sample.png" alt="Image 1" class="qCard-img">
-                        <div class="arrow-button text-white">&#8594;</div>
-                    </a>
-                </div>
+            <!-- Market Creation -->
+            <div id="card-mc" class="card qCard">      
+                <a class="qCard-link" href="/quiz/market_creation">                      
+                    <p class="qCard-h text-white">Market Creation</p>
+                    <p class="qCard-desc text-white">Evaluate the strategies and actions needed to develop vibrant markets for circular economy products and services</p>
+                    <div class="arrow-button text-white">&#8594;</div>
+                </a>
+            </div>
+            <!-- Organisational Change -->
+            <div id="card-oc" class="card qCard">      
+                <a class="qCard-link" href="/quiz/organisational_change">                      
+                    <p class="qCard-h text-white">Organisational Change</p>
+                    <p class="qCard-desc text-white">Assess the processes and transformations your organisation requires to embrace and implement circular economy principles effectively.</p>
+                    <div class="arrow-button text-white">&#8594;</div>
+                </a>
+            </div>
+            <!-- All -->
+            <div id="card-combination" class="card qCard">                            
+                <a class="qCard-link" href="/quiz/all">
+                    <p class="qCard-h text-white">Market Creation + Organisational Change</p>
+                    <p class="qCard-desc text-white">Dive deeper for a bespoke assessment of the essential synergy between transforming internal processes and creating external markets to drive circular economy adoption within your organisation. </p>
+                    <div class="arrow-button text-white">&#8594;</div>
+                </a>
             </div>
         </div>
     </div>
@@ -222,36 +232,39 @@
         <!-- Padding -->
         <div class="body">
             <!-- Heading  -->
-            <div class="textBox text-center">
-               <h1 class="text-6xl font-medium mb-5">Why take this quiz</h1>
+            <div class=" text-center">
+               <h1 class="">Why take this quiz</h1>
             </div>
             <!-- Stacks -->
             <div id="reason-stack" class="mt-10">
                 <!-- First stack -->
                 <div class= "flex">
-                    <div class="w-1/2">
-                        <p class="text-base font-normal">Description goes here</p>                
+                    <div class="reasonTextDiv w-1/2">
+                        <h4 class="blue-text">Clear Roadmap to Circular Success</h4>
+                        <p class="">The CE-MAP diagnostics tool offers users a clear and structured roadmap to navigate the complexities of transitioning to a circular economy. It breaks down the process into manageable steps, ensuring that organisations and other stakeholders know exactly where to start and how to progress. This clarity is invaluable in an era where sustainability and circularity are critical but can seem overwhelming. With CE-MAP, users gain a sense of direction, making it easier to set goals, measure progress, and stay on course.</p>                
                     </div>
-                    <div class="col w-1/2">
-                        <img src="/images/Sample.png" alt="Image sample" class="reasonImage">
+                    <div class="reasonImageDiv col w-1/2">
+                        <img src="/images/road_to_success.jpg" alt="Image sample" class="reasonImage">
                     </div>
                 </div>     
                 <!-- Second stack -->
                 <div class= "flex">
-                    <div class="col w-1/2">
-                        <img src="/images/Sample.png" alt="Image sample" class="reasonImage">
+                    <div class="reasonImageDiv col w-1/2">
+                        <img src="/images/decision_making.jpg" alt="Image sample" class="reasonImage">
                     </div>
-                    <div class="w-1/2">
-                        <p class="text-base font-normal">Description goes here</p>                
+                    <div class="reasonTextDiv w-1/2">
+                        <h4 class="blue-text">Tailored Assessments for Informed Decision-Making</h4>
+                        <p class="">The circular economy is a game-changer, focusing on waste reduction, recycling, and boosting a sustainable business model. Dive into a new world of economic understanding and optimise your company’s operations in a way that benefits both profits and the planet.</p>                
                     </div>
                 </div>             
                 <!-- Third stack -->
                 <div class= "flex">
-                    <div class="w-1/2">
-                        <p class="text-base font-normal">Description goes here</p>                
+                    <div class="reasonImageDiv w-1/2">
+                        <h4 class="blue-text">Real-World Impact and Sustainability</h4>
+                        <p class="">Ultimately, the CE-MAP diagnostics tool is about achieving real-world impact. Users should embrace this tool because it translates theory into tangible actions that benefit the environment, society, and the bottom line. By adopting circular practices identified through CE-MAP, users contribute to reduced waste, improved resource efficiency, and a more sustainable future. Whether motivated by environmental stewardship, cost savings, product innovation or regulatory compliance, CE-MAP equips you with the knowledge and strategies to make a meaningful difference globally. It's a practical, action-oriented approach to circularity that yields benefits for all.</p>                
                     </div>
-                    <div class="col w-1/2">
-                        <img src="/images/Sample.png" alt="Image sample" class="reasonImage">
+                    <div class="reasonTextDiv col w-1/2">
+                        <img src="/images/impact_sustainability.jpg" alt="Image sample" class="reasonImage">
                     </div>
                 </div>      
             </div>

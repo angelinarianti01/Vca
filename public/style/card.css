@@ -1,25 +1,76 @@
 .qCard {    
-    background: linear-gradient(180deg, #14DE9B, rgba(190, 255, 197, 0.3));            
     transition: background-color 0.3s;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    position: relative;
 }
 
-.qCard:hover {
-    background-color: #14DE9B; /* Change to desired lighter background color on hover */
+#card-ee {
+    background-image: url('/images/enabling_env_black.jpg'); 
+    background-size: contain;  
+    background-position: center center; 
 }
 
-.qCard-content {
-    padding: 1rem;
+#card-ee:hover {
+    background-image: url('/images/enabling_env_white.jpg'); 
+    background-size: contain;  
+    background-position: center center; 
+}
+
+#card-mc {
+    background-image: url('/images/market_creation_black.jpg'); 
+    background-size: contain;  
+    background-position: center center; 
+}
+
+#card-mc:hover {
+    background-image: url('/images/market_creation_white.jpg'); 
+    background-size: contain;  
+    background-position: center center; 
+}
+
+#card-oc {
+    background-image: url('/images/organisational_change_black.jpg'); 
+    background-size: contain;  
+    background-position: center center; 
+}
+
+#card-oc:hover {
+    background-image: url('/images/organisational_change_white.jpg'); 
+    background-size: contain;  
+    background-position: center center; 
+}
+
+#card-combination {
+    background-image: url('/images/combination_black.jpg'); 
+    background-size: contain;  
+    background-position: center center; 
+}
+
+#card-combination:hover {
+    background-image: url('/images/combination_white.jpg'); 
+    background-size: contain;  
+    background-position: center center; 
+}
+
+.qCard:hover  .qCard-h{
+    color: var(--dark-blue);
+}
+
+.qCard:hover  .qCard-desc{
+    color: var(--dark-blue);
 }
 
 .qCard-h {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    transition: opacity 0.3s;
+    transition: transform 0.4s;
+    transform: translateY(50%);
 }
 
 .qCard-desc {
@@ -33,7 +84,10 @@
 
 .arrow-button {
     text-align: right;
-    transition: opacity 0.3s;
+    transition: color 0.3s;   
+    transition: top 0.3s;    
+    position: absolute;
+    top: 70%;
 }
 
 .qCard-img {
@@ -44,9 +98,14 @@
 /* Card on hover */
 .qCard:hover .qCard-img,
 .qCard:hover .arrow-button {
-    opacity: 0;
+    color: var(--dark-blue);
+    top: 90%;
 }
 
+.qCard:hover .qCard-h {
+    transform: translateY(0%);
+    opacity: 100%;
+}
 .qCard:hover .qCard-desc {
     transform: translateY(0%);
     opacity: 100%;

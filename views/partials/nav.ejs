@@ -1,6 +1,8 @@
+<link rel="stylesheet" href="/style/main.css">
+
 <nav class="nav"> <!-- items-center makes it vertically centered -->
     <div class="logo w-1/5">                        
-        <a href="/"><img src="/images/VCA Logo.png" alt="menu" class="w-52"></a>
+        <a href="/"><img src="/logos/activator.png" alt="menu" class="w-52"></a>
     </div>
     <ul class="navMenu">
         <li class="menu">
@@ -33,11 +35,7 @@
         justify-content: space-between;
         align-items: center;
         padding:1.5% 9%;
-        background: linear-gradient(
-            135deg, 
-            rgba(45, 98, 234, 1), 
-            rgba(72, 117, 233, 1)
-        );
+        background: var(--dark-blue);       
     }
     .navMenu {
         list-style: none;
@@ -49,7 +47,7 @@
     /* Menu */
     .menu {    
         padding: 15px 30px;
-        width: 200px;
+        width: 250px;
     }
 
     .menu a {
@@ -59,10 +57,10 @@
     }
 
     .menu:hover {
-        border: 1px solid white;
+        background-color: var(--medium-blue);
+        /* border: 1px solid white; */
         border-radius: 25px;
-        text-align: center;
-        border-bottom: none;
+        text-align: center;        
     }    
 
     /* Subnav */
@@ -74,26 +72,27 @@
         border: 1px solid white;
         border-radius: 25px;
         border-top: none;        
-        margin-top: 3%;
+        margin-top: 6%;
     }
 
     .subNav a {
         display: block;
-        padding: 10px;
+        padding: 15px 30px;
         text-decoration: none;
-        color: #333;
+        color: var(--dark-blue);
     }
 
     /* Additional hover styles for subnav items */
     .subNav a:hover {
-        color: #fff;
-        background: linear-gradient(
-            135deg, 
-            rgba(45, 98, 234, 1), 
-            rgba(72, 117, 233, 1)
-        );
-        width: 100%;
+        color: var(--dark-blue);
+        font-weight: 600;
+        background-color: var(--grey);
+        width: 100%;        
+    }
 
+    .subNav a:first-child {
+        border-top-left-radius: 25px;
+        border-top-right-radius: 25px;
     }
 
     .subNav a:last-child:hover {
@@ -103,15 +102,11 @@
 
     /* Show subnav on hover */
     #quizMenu:hover .subNav {
-        display: block;        
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;                
+        display: block;                       
     }
 
     #quizMenu:hover {
-        padding: 15px 0px; /* padding goes to subnav */        
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
+        padding: 15px 0px; /* padding goes to subnav */                
     }
 </style>
 
