@@ -138,15 +138,18 @@ app.post('/quiz/:module/start', async (req, res) => {
         let userInsert = await insertRowToExcel('./data/result.xlsx', 'user', userData)
 
         // Fetch modules
-        let params = req.params.module.replace('_', ' ');
+        let params = req.params.module.replaceAll('_', ' ');
         
         // Load modules
         let module = await loadExcelAsArray('./data/modules.xlsx', 'modules')
         module = module.filter(function(m) {return m.name.toLowerCase() == params})[0]
 
+
         // Load questions
-        let questions = await loadExcelAsArray('./data/modules.xlsx', 'questions')
-        questions = questions.filter(function(q) {return module['id'].includes(q.module)})        
+        let questions = await loadExcelAsArray('./data/modules.xlsx', 'questions')     
+        questions = questions.filter(function(q) {return module['id'].includes(q.module)}) 
+
+        console.log(questions)
 
         // Load question attr
         let sub_questions = await loadExcelAsArray('./data/modules.xlsx', 'sub_questions')
@@ -182,8 +185,8 @@ app.post('/result/market_creation_and_organisational_change', async (req, res) =
         // Get module
         if (q == 'module') {
             let module = JSON.parse(req.body[q]);            
-            modules[m2] = { id: 'm2', name: 'Market Creation', code: 'mc' }
-            modules[m3] = { id: 'm3', name: 'Organisational Change', code: 'oc' }
+            modules['m2'] = { id: 'm2', name: 'Market Creation', code: 'mc' }
+            modules['m3'] = { id: 'm3', name: 'Organisational Change', code: 'oc' }
         }
         // Get user data
         else if (q == 'userData') {               
