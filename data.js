@@ -1,5 +1,43 @@
+// Excel Spreadsheet
 const ExcelJS = require('exceljs');
 const workbook = new ExcelJS.Workbook();
+
+const loadExcelAsArray = async function(filePath, sheetName) {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(filePath);
+  const sheet = workbook.getWorksheet(sheetName); // Assuming you want the first sheet
+  const jsonArray = [];
+
+  let isFirstRow = true;
+
+  sheet.eachRow({ includeEmpty: false }, function(row, rowNumber) {
+    if (isFirstRow) {
+      isFirstRow = false;
+      return; // Skip the header row
+    }
+
+    const rowData = {};
+    row.eachCell({ includeEmpty: true }, function(cell, colNumber) {
+      const headerCell = sheet.getCell(1, colNumber); // Assuming the first row contains headers
+      const headerText = headerCell.value;
+      rowData[headerText] = cell.value;
+    });
+
+    jsonArray.push(rowData);
+  });
+
+  return jsonArray;
+};
+
+const conditionalFetchCell2 = function (data, conditionalKey, conditionalValue, targetKey) {
+  const item = data.find(item => item[conditionalKey] === conditionalValue);
+  return item ? item[targetKey] : null;
+}
+
+const conditionalFetchRow2 = function (data, conditionalKey, conditionalValue, targetKey) {
+  const item = data.find(item => item[conditionalKey] === conditionalValue);
+  return item ? item : null;
+}
 
 const conditionalFetchCell = (fileName, sheet, conditionalColumn, conditionalValue, targetColumn) => {
   try {    
@@ -210,25 +248,26 @@ const conditionalFetchRows = (fileName, sheet, conditionalColumn, conditionalVal
   }
 }
 
-async function insertRowToExcel(fileName, sheet, jsonObject) {
+const insertRowToExcel = async function(fileName, sheet, jsonObject) {
   const workbook = new ExcelJS.Workbook();
+  var id = '';
 
   try {
     // Load the existing Excel file
     await workbook.xlsx.readFile(fileName);
 
-    // Get the desired worksheet
+    // Get worksheet
     const worksheet = workbook.getWorksheet(sheet);
 
-    // Add a new row to the worksheet
+    // Add row to worksheet
     const newRow = worksheet.addRow([]);
 
-    // Get the header row (row 1) to match against JSON object fields
+    // Get header
     const headerRow = worksheet.getRow(1);
 
     // Loop through each column (cell) in the header row
     headerRow.eachCell((headerCell, colNumber) => {
-      const headerText = headerCell.value;
+      const headerText = headerCell.value;      
 
       // Check if the header matches a field in the JSON object
       if (jsonObject.hasOwnProperty(headerText)) {
@@ -236,16 +275,39 @@ async function insertRowToExcel(fileName, sheet, jsonObject) {
 
         // Assign the value to the corresponding cell in the new row
         newRow.getCell(colNumber).value = cellValue;
-      }
+      }      
     });
 
+    // Assign id to first column for user
+    if (sheet == 'user') {
+
+      // Create id
+      id = `${generateRandomId()}${worksheet.lastRow.number}`
+
+      // Assign id to row
+      newRow.getCell(1).value = id;
+    }
+    
     // Save the modified workbook back to the same Excel file
     await workbook.xlsx.writeFile(fileName);
 
+    
     console.log('Row added to Excel file with matching headers successfully.');
+    
+    return id;
   } catch (error) {
     console.error('Error:', error.message);
   }
+}
+
+function generateRandomId() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let randomId = '';
+  for (let i = 0; i < 4; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomId += characters[randomIndex];
+  }
+  return randomId;
 }
 
 const postModuleResult = (fileName, module, name, email, answerArray, questionScores) => {
@@ -274,6 +336,9 @@ const postModuleResult = (fileName, module, name, email, answerArray, questionSc
 }
 
 module.exports = {
+  loadExcelAsArray,
+  conditionalFetchCell2,
+  conditionalFetchRow2,
   conditionalFetchCell,
   twoConditionalFetchCell,
   conditionalFetchRow,

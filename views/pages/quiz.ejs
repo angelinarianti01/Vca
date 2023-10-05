@@ -26,22 +26,22 @@ label {
     </header>
 
     <!-- Progress bar -->
-    <div class="w-full bg-gray-200 h-4 flex items-center">
+    <div class="w-full bg-gray-200 h-4 flex items-center mt-24">
         <div id="pb" class="bg-[#8BA9AD] h-full rounded-r-lg transition-all ease-out duration-1000"></div>
         <span id="pb-label" class="-ml-10 text-xs text-black font-medium"></span>
     </div>
 
     <!-- Body -->
-    <div class="body">
+    <div class="body">        
         <!-- Quiz -->    
-        <form id="quiz" <% if (modules.length>1) { %>action="/result/all"<% } else { %>action="/result"<% } %> method="post">
+        <form id="quiz" <% if (module.id=='m2m3') { %>action="/result/market_creation_and_organisational_change"<% } else { %>action="/result"<% } %> method="post">
             <!-- Hidden input: Which module -->
-            <input type="hidden" name="modules" value="<%= JSON.stringify(modules) %>">  
-            <input type="hidden" name="userData" value="<%= JSON.stringify(userData) %>">  
+            <input type="hidden" name="module" value="<%= JSON.stringify(module) %>">  
+            <input type="hidden" name="userId" value="<%= JSON.stringify(userId) %>">  
 
             <!-- Submit button -->
-            <div id="submit" class="w-full buttons clear-both text-center mt-10">
-                <button type="submit" class="px-9 py-3 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white hover:tracking-widest">See your result</a>
+            <div id="submit" class="text-center mt-10">
+                <a><button type="submit" class="blue-button w-1/4">See your result</button></a>
             </div>
         </form>
     </div>
@@ -52,10 +52,8 @@ label {
 <script type='text/javascript'> 
 
 // Retrieve data from server
-let modules = JSON.parse('<%= JSON.stringify(modules) %>'.replace(/&#34;/g, '"'));
+let module = JSON.parse('<%= JSON.stringify(module) %>'.replace(/&#34;/g, '"'));
 let data = JSON.parse('<%= JSON.stringify(data) %>'.replace(/&#34;/g, '"'));
-
-console.log(modules);
 
 // Set progress bar
 let pb = document.getElementById('pb')
@@ -140,20 +138,30 @@ const createRadioLabel = (id, className, label, name, value) => {
 
 window.onload = function() {
     console.log('Page has fully loaded');
+    console.log(module);
     
     // Get container
     const quiz = document.getElementById('quiz');
     
-    // Loop through modules
-    modules.forEach(m => {
+    // Analyse module
+    if (module['id'] == 'm2m3') {
         // Create module
-        let moduleBox = createModuleBox(m.id, m.name);
+        let moduleBox1 = createModuleBox('m2', 'Market Creation');
+        let moduleBox2 = createModuleBox('m3', 'Organisational Change');
+
+        // Insert
+        const submit = document.getElementById('submit');
+        quiz.insertBefore(moduleBox1, submit);
+        quiz.insertBefore(moduleBox2, submit);
+    }
+    else {
+        // Create module
+        let moduleBox = createModuleBox(module['id'], module.name);
         
         // Insert
         const submit = document.getElementById('submit');
-
         quiz.insertBefore(moduleBox, submit);
-    })
+    }
 
     // Loop through questions
     data.forEach( (q,i) => {
@@ -167,7 +175,7 @@ window.onload = function() {
         let radioButtonsGroup = createRadioButtonDiv();
         
         // Loop through options
-        q.q_options.forEach(o => {
+        q.q_options.forEach(o => {            
             // Create option label                
             radioButtonsGroup.appendChild(createRadioLabel(o.id, 'qOptions', o.option, q.id, JSON.stringify(o)))            
         })
@@ -204,6 +212,7 @@ window.onload = function() {
                         let radioButtonsGroup = createRadioButtonDiv();
                         // Loop through sub options
                         q.sq_options.forEach(sqo => {
+                            console.log(sqo)
                             // Create option label
                             radioButtonsGroup.appendChild(createRadioLabel(sqo.id, 'sqOptions', sqo.option, sq.id, JSON.stringify(sqo)));            
                         })
@@ -228,4 +237,5 @@ window.onload = function() {
         })
     })
 };
+
 </script>

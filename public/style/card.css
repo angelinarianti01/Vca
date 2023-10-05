@@ -9,13 +9,13 @@
 }
 
 #card-ee {
-    background-image: url('/images/enabling_env_black.jpg'); 
+    background-image: url('/images/enabling_environment_black.jpg'); 
     background-size: contain;  
     background-position: center center; 
 }
 
 #card-ee:hover {
-    background-image: url('/images/enabling_env_white.jpg'); 
+    background-image: url('/images/enabling_environment_white.jpg'); 
     background-size: contain;  
     background-position: center center; 
 }

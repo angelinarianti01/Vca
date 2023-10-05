@@ -132,11 +132,11 @@ const insertRadialChart = (containerId, label, color, bgColor, chartHeight, holl
                 },
                 dataLabels: {
                   name: {             
-                    show: false,
-                  },
-                  value: {   
                     show: true,
                     fontSize: 20,                                       
+                  },
+                  value: {   
+                    show: false,                  
                   },                
                 },
                 hollow: {

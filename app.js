@@ -5,7 +5,7 @@ const app = express()
 const port = 5000
 const path = require('path');
 
-const { conditionalFetchCell, jsonConditionalFetchCell, conditionalFetchRows, conditionalFetchRow, postModuleResult, insertRowToExcel, twoConditionalFetchCell } = require('./data')
+const { loadExcelAsArray, conditionalFetchCell2, conditionalFetchRow2, conditionalFetchCell, jsonConditionalFetchCell, conditionalFetchRows, conditionalFetchRow, postModuleResult, insertRowToExcel, twoConditionalFetchCell } = require('./data')
 
 // Init
 const cat = {
@@ -43,6 +43,10 @@ app.set('view engine', 'ejs');
 // Navigation
 // 1. Home 
 app.get('', async (req, res) => {
+    const data = await loadExcelAsArray('./data/modules.xlsx', 'modules')
+    const result = await conditionalFetchCell2(data, 'name', 'Enabling Environment', 'code')
+    const row = await conditionalFetchRow2(data, 'name', 'Enabling Environment', 'code')
+    console.log(row)
     res.render('pages/index', { text: 'Hey' })
 })
 // 2. About 
@@ -54,38 +58,72 @@ app.get('/quiz', (req, res) => {
     res.render('pages/quiz', { data: [...data.mc, ...data.oc], module:'market_creation,organisational_change'})
 })
 app.get('/quiz/:module', (req, res) => {      
-    // Get module data
-    res.render('pages/start_quiz', { module: req.params.module })
-})
-app.post('/quiz/:module/start', async (req, res) => {
-    try {
-        // Init
-        let questions = [];
-        let modules = [];
-        let data = {};
-        let userData = {};
+    let module = req.params.module;
+    let desc = '';
 
-        // Init name
-        let firstName = '';
-        let lastName = '';
+    // Define desc
+    switch(module) {
+        case 'enabling_environment':
+            desc = 'Assess the broader factors and conditions that support or hinder the transition to a circular economy, such as policies, regulations, and funding.'
+            break;
+        case 'market_creation':
+            desc = 'Evaluate the strategies and actions needed to develop vibrant markets for circular economy products and services'
+            break;
+        case 'organisational_change':
+            desc = 'Assess the processes and transformations your organisation requires to embrace and implement circular economy principles effectively.'
+            break;
+        case 'market_creation_and_organisational_change':
+            desc = 'Dive deeper for a bespoke assessment of the essential synergy between transforming internal processes and creating external markets to drive circular economy adoption within your organisation.'
+            break;
+    }
+
+    // Get module data
+    res.render('pages/start_quiz', { module: module, desc: desc})
+})
+
+app.post('/quiz/:module/start', async (req, res) => {
+    try {    
+        // Init user data
+        let userData = {};
 
         // Fetch user data
         for (const q in req.body) {
             // Get data
-            if (q == 'first-name') {
-                firstName = req.body['first-name']            
+            if (q == 'first_name') {
+                firstName = req.body['first_name']            
             }
-            else if (q == 'last-name') {
-                lastName = req.body['last-name']
+            else if (q == 'last_name') {
+                lastName = req.body['last_name']
             }
-            else if (q == 'email-address') {
-                userData['email'] = req.body['email-address']
+            else if (q == 'org_name') {
+                userData['org_name'] = req.body['org_name']
             }
-            else if (q == 'org-name') {
-                userData['org_name'] = req.body['org-name']
+            else if (q == 'industry') {
+                userData['industry'] = req.body['industry']
             }
-            else if (q == 'org-type') {
-                userData['org_type'] = req.body['org-type']
+            else if (q == 'job_title') {
+                userData['job_title'] = req.body['job_title']
+            }
+            else if (q == 'email') {
+                userData['email'] = req.body['email']
+            }
+            else if (q == 'years_of_experience') {
+                userData['years_of_experience'] = req.body['years_of_experience']
+            }            
+            else if (q == 'goal') {
+                userData['goal'] = req.body['goal']
+            }
+            else if (q == 'reason_of_use') {
+                userData['reason_of_use'] = req.body['reason_of_use']
+            }
+            else if (q == 'hear_about_us') {
+                userData['hear_about_us'] = req.body['hear_about_us']
+            }
+            else if (q == 'enganged_in_ce') {
+                userData['enganged_in_ce'] = req.body['enganged_in_ce']
+            }
+            else if (q == 'comments') {
+                userData['comments'] = req.body['comments']
             }
             // Get answers
             else {
@@ -93,55 +131,46 @@ app.post('/quiz/:module/start', async (req, res) => {
             }
         }
 
-        // Get name
+        // Concatenate name
         userData['name'] = firstName + ' ' + lastName
+
+        // Write user data
+        let userInsert = await insertRowToExcel('./data/result.xlsx', 'user', userData)
 
         // Fetch modules
         let params = req.params.module.replace('_', ' ');
-
-        // If all is requested
-        if (params == 'all') {
-            // Fetch MC and OC
-            modules.push(await conditionalFetchRow('./data/modules.xlsx', 'modules', 'code', 'mc'))
-            modules.push(await conditionalFetchRow('./data/modules.xlsx', 'modules', 'code', 'oc'))
-        }
-        // If specific is requested
-        else {
-            modules.push(await conditionalFetchRow('./data/modules.xlsx', 'modules', 'name', params))
-        }
         
-        // For each module
-        await Promise.all(modules.map(async m => {
-            // Fetch questions of the module
-            let mQuestions = await conditionalFetchRows('./data/modules.xlsx', 'questions', 'module', `${m.id}`);
+        // Load modules
+        let module = await loadExcelAsArray('./data/modules.xlsx', 'modules')
+        module = module.filter(function(m) {return m.name.toLowerCase() == params})[0]
 
-            // Fetch sub questions
-            for (let i = 0; i < mQuestions.length; i++) {
-                // Tag with module id
-                mQuestions[i]['module'] = m.id;
-                // Get options
-                mQuestions[i]['q_options'] = await conditionalFetchRows('./data/modules.xlsx', 'q_options', 'question', `${mQuestions[i].id}`);
-                // Get subquestions
-                mQuestions[i]['sub_questions'] = await conditionalFetchRows('./data/modules.xlsx', 'sub_questions', 'question', `${mQuestions[i].id}`);
-                // Get subquestions options
-                mQuestions[i]['sq_options'] = await conditionalFetchRows('./data/modules.xlsx', 'sq_options', 'question', `${mQuestions[i].id}`);
-            }
+        // Load questions
+        let questions = await loadExcelAsArray('./data/modules.xlsx', 'questions')
+        questions = questions.filter(function(q) {return module['id'].includes(q.module)})        
 
-            // Append to questions bank
-            return mQuestions;
-        })).then((results) => {
-            // Flatten the array of arrays
-            questions = results.flat(); 
-        });        
+        // Load question attr
+        let sub_questions = await loadExcelAsArray('./data/modules.xlsx', 'sub_questions')
+        let qOptions = await loadExcelAsArray('./data/modules.xlsx', 'q_options')
+        let sqOptions = await loadExcelAsArray('./data/modules.xlsx', 'sq_options')
 
-        res.render('pages/quiz', { modules:modules, data: questions, userData:userData })
+        // Include into q
+        for (let i = 0; i < questions.length; i++) {
+            // subquestions
+            questions[i]['sub_questions'] = sub_questions.filter(function(sq) {return sq.question == questions[i].id})
+            // q options
+            questions[i]['q_options'] = qOptions.filter(function(o) {return o.question == questions[i].id})            
+            // sq options
+            questions[i]['sq_options'] = sqOptions.filter(function(o) {return o.question == questions[i].id})
+        }
+
+        res.render('pages/quiz', { module:module, data: questions, userId: userInsert})
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('An error occurred.');
     }
 });
 
-app.post('/result/all', async (req, res) => {
+app.post('/result/market_creation_and_organisational_change', async (req, res) => {
     // Init variables    
     let modules = {};
     let data = {};
@@ -151,11 +180,10 @@ app.post('/result/all', async (req, res) => {
     // Parse through request form
     for (const q in req.body) {
         // Get module
-        if (q == 'modules') {
-            let mArray = JSON.parse(req.body[q]);
-            mArray.forEach(m => {
-                modules[m.id] = m
-            });
+        if (q == 'module') {
+            let module = JSON.parse(req.body[q]);            
+            modules[m2] = { id: 'm2', name: 'Market Creation', code: 'mc' }
+            modules[m3] = { id: 'm3', name: 'Organisational Change', code: 'oc' }
         }
         // Get user data
         else if (q == 'userData') {               
@@ -217,31 +245,32 @@ app.post('/result/all', async (req, res) => {
 
 app.post('/result', async (req, res) => {
     // Init variables
+    console.log(req.body)
     let module;
     let data = {};
     let scores = {};
-    let userData = {};
+    let userId = {};
     
     // Parse through request form
     for (const q in req.body) {
         // Get module
-        if (q == 'modules') {            
-            module = JSON.parse(req.body[q])[0];
+        if (q == 'module') {            
+            module = JSON.parse(req.body[q]);
         }
-        // Get user data
-        else if (q == 'userData') {   
-            userData = JSON.parse(req.body[q])
+        else if (q == 'userId') {            
+            userId = req.body[q];
         }
-        // Get answers
         else {
             data[q] = JSON.parse(req.body[q]);          
         }
     }       
 
-    scores = await scoreAndSave(module,data, userData);
+    scores = await scoreAndSave(module, data, userId);
 
     console.log('modules is ')
     console.log(module)
+    console.log('userid is ')
+    console.log(userId)
     console.log('data is')
     console.log(data)
     console.log('scores is')
@@ -281,11 +310,14 @@ app.listen(port, () => console.info(`App listening on port ${port}`))
 
 
 const scoreAndSave = async(module, data, userData) => {
-    // Calculate question score
-    let qScores = await calculateQScores(data);        
-    
     // Get sheetname        
     let moduleSheet =  module.name.replace(' ', '_').toLowerCase()
+
+    // Load scores
+    const scoring = loadExcelAsArray('./data/scoring.xlsx', moduleSheet)
+
+    // Calculate question score
+    let qScores = await calculateQScores(data, scoring);       
 
     // Get insert row
     let insertRow = await getInsertRow(module, data, qScores);
@@ -335,7 +367,7 @@ const getInsertRow = async (module, answers, qScores ) => {
     return insertRow 
 }
 
-const calculateQScores = async (answers) => {
+const calculateQScores = async (answers, scoring) => {
     // Init result
     let result = {};
 
@@ -345,7 +377,7 @@ const calculateQScores = async (answers) => {
         let qid =answers[q].question
         if (result.hasOwnProperty(qid)) {
             // Aggregate
-            result[qid]['score'] += answers[q].score
+            result[qid]['score'] += answers[q].score            
         }
         else {
             // Initiate
