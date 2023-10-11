@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/card.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Home page</title>
+    <title>Victorian Circular Economy</title>
 </head>
 
 <style>    
 
-    #quiz{
+    #survey{
         background: linear-gradient(to top, var(--dark-blue) 60%, var(--medium-blue));  
     }
 
@@ -31,6 +31,11 @@
         align-items: center;
     }
 
+    .qCard-desc {
+        font-weight: 500;
+        color: #000;
+    }
+
     .qCard-img {
         width: 60px;
         height: 60px;        
@@ -40,6 +45,8 @@
     
     #hero {
         background: linear-gradient(to bottom, var(--dark-blue) 30%, var(--medium-blue));  
+        padding-top: 11%;
+        padding-bottom: 11%;
     }
 
     #heroTextDiv {        
@@ -66,12 +73,13 @@
     }
 
     #mapCardCol {
-        width: 50%;
+        width: 30%;
+        margin-right: 3%;
     }
 
     #mapDescCol {
         margin-left: 2%;
-        width: 50%;
+        width: 67%;
     }
 
     .mapDescLiDiv {
@@ -117,6 +125,9 @@
 
     /* Team and sponsors */
 
+    #team, #sponsors {
+        padding-top: 3%;
+    }
     .member {
         margin: 2%;
     }
@@ -144,6 +155,10 @@
         width: 40%;
     }
 
+    .sponsor {
+        padding: 3%;
+    }
+
 </style>
 
 <body>
@@ -152,20 +167,14 @@
         <%- include ('../partials/nav.ejs') %>
     </header>
 
-    <!-- Gradient Background -->
-    <div class="blob w-[800px] h-[800px] rounded-[999px] absolute top-0 right-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200"></div>
-    <div class="blob w-[1000px] h-[1000px] rounded-[999px] absolute bottom-0 left-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-red-200 via-gray-100 to-blue-100"></div>
-    <div class="blob w-[600px] h-[600px] rounded-[999px] absolute bottom-0 left-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-slate-100 via-teal-100 to-blue-100"></div>
-    <div class="blob w-[300px] h-[300px] rounded-[999px] absolute bottom-[-10px] left-0 -z-10 blur-3xl bg-opacity-60 bg-gradient-to-r from-green-200 via-cyan-200 to-Fuchsia-300"></div>
-
     <!-- Hero Section -->
     <div id="hero" class="double-col padded">    
         <div id="heroTextDiv" class="col">
             <h1 class="text-white">Innovate, transform and thrive through circular solutions !</h1>
             <p class="text-white mt-5">The CE-MAP diagnostics tool empowers your organisation to embrace sustainability, fostering growth and resilience. Discover untapped opportunities, drive change, and gain a competitive edge in today’s market.</p>
 
-            <!-- Start quiz button -->        
-            <a class="white-button w-1/2 mt-10" href="#quiz" class="blue-text">Take the quiz</a>
+            <!-- Start survey button -->        
+            <a class="white-button w-1/2 mt-10" href="#survey" class="blue-text">Take the survey</a>
         </div>
         
         <div id="heroImgDiv" class="col">
@@ -176,17 +185,14 @@
     <!-- What is CE-Map -->
     <div class="double-col padded">
         <!-- Card -->
-        <div id="mapCardCol" class="col w-1/2">
+        <div id="mapCardCol" class="col">
             <div id="mapCard" class="card">
                 <h2 class="">What is CE-MAP?</h2>
-                <p class="">Circular Economy - Measurements, Assessments, and Pathways (CE-MAP) is a comprehensive framework that guides organisations, communities, and governments towards a more sustainable and circular future. CE-MAP goes beyond theory; it's a practical roadmap for change.</p>
-                <p class="">With CE-MAP, you can measure your organisation’s progress, assess your impact, and chart the pathways to a circular economy. It's about making real-world changes, from reducing waste and pollution to designing products that last longer and benefit everyone.</p>
-                <p class="">CE-MAP isn't just for businesses. It's for all stakeholders. It helps governments create policies that support circular practices, communities build sustainable systems, and organisations make choices that reduce their environmental footprint.</p>
-                <p class="">In a world facing pressing environmental challenges, CE-MAP provides a clear and actionable plan for a better tomorrow. It's a journey towards a circular economy where resources are used efficiently, waste is minimised, and everyone can enjoy the benefits of a sustainable future.</p>
+                <p class="">Circular Economy - Measurements, Assessments, and Pathways (CE-MAP) is a comprehensive framework that guides organisations, communities, and governments towards a more sustainable and circular future. CE-MAP goes beyond theory; it's a practical roadmap for change in the important domains of Market Creation, Organisational Change, and Enabling Environment.</p>
             </div>
         </div>
         <!-- Benefits -->
-        <div id="mapDescCol" class="col w-1/2">
+        <div id="mapDescCol" class="col">
             <!-- Benefit 1 -->
             <div class="mapDescLiDiv">
                 <div class="mapDescLiCol1">
@@ -220,17 +226,17 @@
         </div>            
     </div>
 
-     <!-- Choose a quiz -->
-     <div id="quiz" class="padded">
+     <!-- Choose a survey -->
+     <div id="survey"class="padded">
         <!-- heading -->
         <div class="text-center">
-            <h1 class="text-white">Choose a quiz</h1>            
+            <h1 class="text-white">Choose a Survey</h1>            
         </div>
         <!-- cards -->
         <div class="card-container flex justify-center mt-10">
             <!-- Enabling Environment -->
             <div id="card-ee" class="card qCard">      
-                <a class="qCard-link" href="/quiz/enabling_environment">                 
+                <a class="qCard-link" href="/survey/enabling_environment">                 
                     <h2 class="qCard-h text-white">Enabling Environment</h2>
                     <p class="qCard-desc text-white">Assess the broader factors and conditions that support or hinder the transition to a circular economy, such as policies, regulations, and funding.</p>
                     <div class="arrow-button text-white">&#8594;</div>
@@ -238,7 +244,7 @@
             </div>
             <!-- Market Creation -->
             <div id="card-mc" class="card qCard">      
-                <a class="qCard-link" href="/quiz/market_creation">                      
+                <a class="qCard-link" href="/survey/market_creation">                      
                     <p class="qCard-h text-white">Market Creation</p>
                     <p class="qCard-desc text-white">Evaluate the strategies and actions needed to develop vibrant markets for circular economy products and services</p>
                     <div class="arrow-button text-white">&#8594;</div>
@@ -246,7 +252,7 @@
             </div>
             <!-- Organisational Change -->
             <div id="card-oc" class="card qCard">      
-                <a class="qCard-link" href="/quiz/organisational_change">                      
+                <a class="qCard-link" href="/survey/organisational_change">                      
                     <p class="qCard-h text-white">Organisational Change</p>
                     <p class="qCard-desc text-white">Assess the processes and transformations your organisation requires to embrace and implement circular economy principles effectively.</p>
                     <div class="arrow-button text-white">&#8594;</div>
@@ -254,7 +260,7 @@
             </div>
             <!-- All -->
             <div id="card-combination" class="card qCard">                            
-                <a class="qCard-link" href="/quiz/all">
+                <a class="qCard-link" href="/survey/market_creation_and_organisational_change">
                     <p class="qCard-h text-white">Market Creation + Organisational Change</p>
                     <p class="qCard-desc text-white">Dive deeper for a bespoke assessment of the essential synergy between transforming internal processes and creating external markets to drive circular economy adoption within your organisation. </p>
                     <div class="arrow-button text-white">&#8594;</div>
@@ -263,109 +269,126 @@
         </div>
     </div>
 
-    <!-- Different color: Why take the quiz -->
-    <div id="reason" class="mt-10">     
-        <!-- Padding -->
-        <div class="body">
-            <!-- Heading  -->
-            <div class=" text-center">
-               <h1 class="">Why take this quiz</h1>
-            </div>
-            <!-- Stacks -->
-            <div id="reason-stack" class="mt-10">
-                <!-- First stack -->
-                <div class= "flex">
-                    <div class="reasonTextDiv w-1/2">
-                        <h4 class="blue-text">Clear Roadmap to Circular Success</h4>
-                        <p class="">The CE-MAP diagnostics tool offers users a clear and structured roadmap to navigate the complexities of transitioning to a circular economy. It breaks down the process into manageable steps, ensuring that organisations and other stakeholders know exactly where to start and how to progress. This clarity is invaluable in an era where sustainability and circularity are critical but can seem overwhelming. With CE-MAP, users gain a sense of direction, making it easier to set goals, measure progress, and stay on course.</p>                
-                    </div>
-                    <div class="reasonImageDiv col w-1/2">
-                        <img src="/images/road_to_success.jpg" alt="Image sample" class="reasonImage">
-                    </div>
-                </div>     
-                <!-- Second stack -->
-                <div class= "flex">
-                    <div class="reasonImageDiv col w-1/2">
-                        <img src="/images/decision_making.jpg" alt="Image sample" class="reasonImage">
-                    </div>
-                    <div class="reasonTextDiv w-1/2">
-                        <h4 class="blue-text">Tailored Assessments for Informed Decision-Making</h4>
-                        <p class="">The circular economy is a game-changer, focusing on waste reduction, recycling, and boosting a sustainable business model. Dive into a new world of economic understanding and optimise your company’s operations in a way that benefits both profits and the planet.</p>                
-                    </div>
-                </div>             
-                <!-- Third stack -->
-                <div class= "flex">
-                    <div class="reasonImageDiv w-1/2">
-                        <h4 class="blue-text">Real-World Impact and Sustainability</h4>
-                        <p class="">Ultimately, the CE-MAP diagnostics tool is about achieving real-world impact. Users should embrace this tool because it translates theory into tangible actions that benefit the environment, society, and the bottom line. By adopting circular practices identified through CE-MAP, users contribute to reduced waste, improved resource efficiency, and a more sustainable future. Whether motivated by environmental stewardship, cost savings, product innovation or regulatory compliance, CE-MAP equips you with the knowledge and strategies to make a meaningful difference globally. It's a practical, action-oriented approach to circularity that yields benefits for all.</p>                
-                    </div>
-                    <div class="reasonTextDiv col w-1/2">
-                        <img src="/images/impact_sustainability.jpg" alt="Image sample" class="reasonImage">
-                    </div>
-                </div>      
-            </div>
+    <!-- Different color: Why take the survey -->
+    <div id="reason" class="padded">     
+        <!-- Heading  -->
+        <div class=" text-center">
+            <h1 class="">Why Take This Survey?</h1>
         </div>
-  </div>
-
-  <!-- Meet our team -->
-  <div id="team" class="padded mt-10">     
-    <!-- Heading  -->
-    <div class=" text-center">
-        <h1 class="">Meet Our Team</h1>
+        <!-- Stacks -->
+        <div id="reason-stack" class="mt-10">
+            <!-- First stack -->
+            <div class= "flex">
+                <div class="reasonTextDiv w-1/2">
+                    <h4 class="blue-text">Clear Roadmap to Circular Success</h4>
+                    <p class="">The CE-MAP diagnostics tool offers users a clear and structured roadmap to navigate the complexities of transitioning to a circular economy. It breaks down the process into manageable steps, ensuring that organisations and other stakeholders know exactly where to start and how to progress. This clarity is invaluable in an era where sustainability and circularity are critical but can seem overwhelming. With CE-MAP, users gain a sense of direction, making it easier to set goals, measure progress, and stay on course.</p>                
+                </div>
+                <div class="reasonImageDiv col w-1/2">
+                    <img src="/images/road_to_success.jpg" alt="Image sample" class="reasonImage">
+                </div>
+            </div>     
+            <!-- Second stack -->
+            <div class= "flex">
+                <div class="reasonImageDiv col w-1/2">
+                    <img src="/images/decision_making.jpg" alt="Image sample" class="reasonImage">
+                </div>
+                <div class="reasonTextDiv w-1/2">
+                    <h4 class="blue-text">Tailored Assessments for Informed Decision-Making</h4>
+                    <p class="">The circular economy is a game-changer, focusing on waste reduction, recycling, and boosting a sustainable business model. Dive into a new world of economic understanding and optimise your company’s operations in a way that benefits both profits and the planet.</p>                
+                </div>
+            </div>             
+            <!-- Third stack -->
+            <div class= "flex">
+                <div class="reasonImageDiv w-1/2">
+                    <h4 class="blue-text">Real-World Impact and Sustainability</h4>
+                    <p class="">Ultimately, the CE-MAP diagnostics tool is about achieving real-world impact. Users should embrace this tool because it translates theory into tangible actions that benefit the environment, society, and the bottom line. By adopting circular practices identified through CE-MAP, users contribute to reduced waste, improved resource efficiency, and a more sustainable future. Whether motivated by environmental stewardship, cost savings, product innovation or regulatory compliance, CE-MAP equips you with the knowledge and strategies to make a meaningful difference globally. It's a practical, action-oriented approach to circularity that yields benefits for all.</p>                
+                </div>
+                <div class="reasonTextDiv col w-1/2">
+                    <img src="/images/impact_sustainability.jpg" alt="Image sample" class="reasonImage">
+                </div>
+            </div>      
+        </div>
     </div>
-    <!-- Content -->
-    <div class="mt-10">
-        <div class= "double-col">
-            <div class="col w-1/2">
-                <div class="member double-col">
-                    <img src="/images/portrait_magnus.png" alt="Image sample" class="memberImg col top-left-rounded-corner">                    
-                    <div class="memberDesc col bg-white">
-                        <h4 class="blue-text">Prof. Magnus Moglia</h4>
-                        <p>Magnus Moglia is an Associate Professor, an internationally recognised expert in urban sustainability solutions and a systems scientist at Swinburne University of Technology’s Centre for Urban Transitions. He has co-authored over 65 articles in leading journals in fields relating to climate adaptation, water management, urban regeneration, circular economy, and energy transitions.</p>
-                    </div>
-                </div>       
-                <div class="member double-col">
-                    <div class="memberDesc col bg-gray-100 bottom-left-rounded-corner">
-                        <h4 class="blue-text">Dr Olamide Shittu</h4>
-                        <p>Olamide Shittu is a Circular Economy Research Fellow at the Centre for Urban Transitions, Swinburne University of Technology, Australia. His research focuses on the systemic transformation of social structures by embedding sustainability principles into household, business, and policy practices. He leads research on developing a Theory of Change for circular economy transitions.</p>
-                    </div>            
-                    <img src="/images/portrait_olamide.jpg" alt="Image sample" class="memberImg col">                                            
-                </div>                    
-            </div>
-            <div class="member col w-1/2">
-                <div class="double-col">                        
-                    <img src="/images/portrait_christian.png" alt="Image sample" class="memberImg col">
-                    <div class="memberDesc col bg-gray-100 top-right-rounded-corner">
-                        <h4 class="blue-text">Prof. Christian Nygaard</h4>
-                        <p>Christian Nygaard is an Associate Professor, an applied social and urban economist, and the Centre for Urban Transitions director at the Swinburne University of Technology. His research explores pathways to just, healthy, and productive urban futures. He has held research and teaching positions in the United Kingdom and Australia.</p>
-                    </div>
-                </div>       
-                <div class="member double-col">
-                    <div class="memberDesc col">
-                        <h4 class="blue-text">Ms Tmnit Halefom</h4>
-                        <p>Tmnit Halefom is a PhD candidate at Swinburne University, with an MPhil from the University of Queensland. Tmnit has been working as a research assistant in developing a Theory of Change for circular economy transitions at Swinburne University. Her doctoral research focuses on mechanisms that can facilitate sustainable mobility outcomes.</p>
-                    </div>
-                    <img class="memberImg col bottom-right-rounded-corner" src="/images/portrait_tmnit.png" alt="Image sample" >
-                </div>      
-            </div>
-        </div>     
-                        
+
+    <!-- Meet our team -->
+    <div id="team" class="padded">     
+        <!-- Heading  -->
+        <div class="text-center">
+            <h1 class="">Meet Our Team</h1>
+        </div>
+        <!-- Content -->
+        <div class="mt-10">
+            <div class= "double-col">
+                <div class="col w-1/2">
+                    <div class="member double-col">
+                        <img src="/images/portrait_magnus.png" alt="Image sample" class="memberImg col top-left-rounded-corner">                    
+                        <div class="memberDesc col bg-white">
+                            <h4 class="blue-text">Prof. Magnus Moglia</h4>
+                            <p>Magnus Moglia is an Associate Professor, an internationally recognised expert in urban sustainability solutions and a systems scientist at Swinburne University of Technology’s Centre for Urban Transitions. He has co-authored over 65 articles in leading journals in fields relating to climate adaptation, water management, urban regeneration, circular economy, and energy transitions.</p>
+                        </div>
+                    </div>       
+                    <div class="member double-col">
+                        <div class="memberDesc col bg-gray-100 bottom-left-rounded-corner">
+                            <h4 class="blue-text">Dr Olamide Shittu</h4>
+                            <p>Olamide Shittu is a Circular Economy Research Fellow at the Centre for Urban Transitions, Swinburne University of Technology, Australia. His research focuses on the systemic transformation of social structures by embedding sustainability principles into household, business, and policy practices. He leads research on developing a Theory of Change for circular economy transitions.</p>
+                        </div>            
+                        <img src="/images/portrait_olamide.jpg" alt="Image sample" class="memberImg col">                                            
+                    </div>                    
+                </div>
+                <div class="member col w-1/2">
+                    <div class="double-col">                        
+                        <img src="/images/portrait_christian.png" alt="Image sample" class="memberImg col">
+                        <div class="memberDesc col bg-gray-100 top-right-rounded-corner">
+                            <h4 class="blue-text">Prof. Christian Nygaard</h4>
+                            <p>Christian Nygaard is an Associate Professor, an applied social and urban economist, and the Centre for Urban Transitions director at the Swinburne University of Technology. His research explores pathways to just, healthy, and productive urban futures. He has held research and teaching positions in the United Kingdom and Australia.</p>
+                        </div>
+                    </div>       
+                    <div class="member double-col">
+                        <div class="memberDesc col">
+                            <h4 class="blue-text">Ms Tmnit Halefom</h4>
+                            <p>Tmnit Halefom is a PhD candidate at Swinburne University, with an MPhil from the University of Queensland. Tmnit has been working as a research assistant in developing a Theory of Change for circular economy transitions at Swinburne University. Her doctoral research focuses on mechanisms that can facilitate sustainable mobility outcomes.</p>
+                        </div>
+                        <img class="memberImg col bottom-right-rounded-corner" src="/images/portrait_tmnit.png" alt="Image sample" >
+                    </div>      
+                </div>
+            </div>                         
+        </div>
     </div>
 
     <!-- Sponsors -->
-    <div id="team padded" class="padded mt-10">     
+    <div id="sponsors" class="padded">     
         <!-- Heading  -->
         <div class=" text-center">
             <h1 class="">Sponsors</h1>
         </div>
         <!-- Content -->
         <div class="flex text-center">
-            <img src="/logos/swinburne.png" alt="Image sample" class="col w-1/5">    
-            <img src="/logos/rmit.png" alt="Image sample" class="col w-1/5">                    
-            <img src="/logos/circular_economy_victoria.png" alt="Image sample" class="col w-1/5">                    
-            <img src="/logos/sustainability_victoria.png" alt="Image sample" class="col w-1/5">                    
-            <img src="/logos/planet_ark.png" alt="Image sample" class="col w-1/5">                                                
+            <div class="col w-1/5 sponsor">
+                <img src="/logos/swinburne.png" alt="Image sample">    
+            </div>
+            <div class="col w-1/5 sponsor">                
+                <img src="/logos/rmit.png" alt="Image sample">                    
+            </div>
+            <div class="col w-1/5 sponsor">                
+                <img src="/logos/circular_economy_victoria.png" alt="Image sample">                    
+            </div>
+            <div class="col w-1/5 sponsor">                
+                <img src="/logos/sustainability_victoria.png" alt="Image sample">                    
+            </div>
+            <div class="col w-1/5 sponsor">                
+                <img src="/logos/planet_ark.png" alt="Image sample">  
+            </div>
+            
         </div>    
-       
+    </div>
+
+    <!-- Footer -->
+    <footer class="">
+        <%- include ('../partials/footer.ejs') %>
+    </footer>
 </body>
 </html>
+
+<script>
+    window.onload = showNav;
+</script>

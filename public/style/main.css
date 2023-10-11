@@ -25,7 +25,11 @@ html {
     padding:5% 10%;
 }
 .padded {
-    padding:10% 10%;
+    padding:8% 10%;
+}
+.horizontal-margin {
+    margin-left: 5%;
+    margin-right: 5%;
 }
 .card {        
     background: #FFFFFF;
@@ -57,14 +61,24 @@ h2 {
     font-weight: 500;    
 }
 
+h3 {
+    font-size: 1.5rem;
+    font-weight: 300;    
+}
+
 h4 {
     font-size: 1.5rem;
     font-weight: 500;    
 }
 
+h5 {
+    font-size: 1.4rem;
+    font-weight: 300;    
+}
+
 p {
-    font-size: 1.1em;
-    font-weight: 200;
+    /* font-size: 1.1em;
+    font-weight: 200; */
 }
 
 .blue-text {
@@ -93,7 +107,7 @@ p {
     padding-bottom: 12px;
     text-align: center;
     box-shadow: 2px 2px 5px black;
-    color: white;
+    color: white;        
 }
 
 .blue-button:hover {
@@ -102,5 +116,36 @@ p {
 
 .button a {
     font-size: 1.25em;
+    font-weight: 500;
+}
+
+/* Radio */
+.radioLabel input[type="radio"] {
+    display: none;
+}
+
+/* Style the custom radio buttons */
+.radioLabel input[type="radio"] + p::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--medium-blue); /* Border color for the radio button */
+    border-radius: 50%; /* Make it a circle */
+    margin-right: 10px; /* Space between the radio button and text */
+    vertical-align: middle;
+}
+
+/* Style the custom radio buttons when checked */
+.radioLabel input[type="radio"]:checked + p::before {
+    border: 5px solid var(--medium-blue);    
+}
+
+/* Align the label text vertically with the radio button */
+.radioLabel p {
+    display: inline-block;
+    vertical-align: middle;
+} 
+.radioLabel input[type="radio"]:checked + p {
     font-weight: 500;
 }

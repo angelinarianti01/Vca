@@ -6,18 +6,18 @@
     </div>
     <ul class="navMenu">
         <a class="menu" href="/" class="">Home</a>
-        <li id="quizMenu" class="menu">
-            Quiz
+        <li id="surveyMenu" class="menu">
+            Survey
             <!-- Subnav -->
             <div class="subNav">
-                <a href="/quiz/enabling_environment">Enabling Environment</a>
-                <a href="/quiz/market_creation">Market Creation</a>
-                <a href="/quiz/organisational_change">Organisational Change</a>
-                <a href="/quiz/market_creation_and_organisational_change">Market Creation & Organisational Change</a>
+                <a href="/survey/enabling_environment">Enabling Environment</a>
+                <a href="/survey/market_creation">Market Creation</a>
+                <a href="/survey/organisational_change">Organisational Change</a>
+                <a href="/survey/market_creation_and_organisational_change">Market Creation & Organisational Change</a>
             </div>    
         </li>        
         
-        <a class="menu" href="#" class="">Contact</a>         
+        <a class="menu" href="/contact" class="">Contact</a>         
         
     </ul>   
 </nav>
@@ -25,6 +25,7 @@
 <style>
     nav {
         display: flex;
+        opacity: 0;
         position: fixed;
         top: 0;
         left: 0;
@@ -33,7 +34,11 @@
         justify-content: space-between;
         align-items: center;
         padding:1.5% 9%;
-        background: var(--dark-blue);       
+        background: var(--dark-blue);     
+        transition: opacity 0.1s ease-in-out;  
+    }
+    .nav-show {
+        opacity: 1;
     }
     .navMenu {
         list-style: none;
@@ -43,19 +48,21 @@
         height: 100%;
     }
     /* Menu */
-    .menu {    
-        padding: 15px 30px;
+    .menu {      
+        padding: 20px 0;   
         width: 250px;
+        min-height: 5%;
         text-decoration: none;
         font-size: 16px;
         color: #fff;        
+        text-align: center;        
     }
 
     .menu:hover {
         background-color: var(--medium-blue);
         /* border: 1px solid white; */
         border-radius: 25px;
-        text-align: center;        
+        padding: 18px 0px;
     }    
 
     /* Subnav */
@@ -72,7 +79,7 @@
 
     .subNav a {
         display: block;
-        padding: 15px 30px;
+        padding: 17px 30px;
         text-decoration: none;
         color: var(--dark-blue);
     }
@@ -96,12 +103,28 @@
     }
 
     /* Show subnav on hover */
-    #quizMenu:hover .subNav {
+    #surveyMenu:hover .subNav {
         display: block;                       
     }
 
-    #quizMenu:hover {
-        padding: 15px 0px; /* padding goes to subnav */                
-    }
 </style>
 
+<script>
+    let lastScrollTop = 0;
+    window.addEventListener("scroll", function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop) {
+            // Scrolling down, hide the navigation bar
+            document.querySelector("nav").classList.remove("nav-show");
+        } else {
+            // Scrolling up, show the navigation bar
+            document.querySelector("nav").classList.add("nav-show");
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+    }, false);
+
+    const showNav = () => {
+        const nav = document.querySelector('nav');
+        nav.classList.add('nav-show');
+    }
+</script>

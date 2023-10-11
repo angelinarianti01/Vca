@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style/card.css">
+    <link rel="stylesheet" href="/style/main.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="/js/script.js"></script>
+    <title>Survey page</title>
+</head>
+
+<style>
+
+    #bussiness-cat {
+        font-size: 2.5rem;
+        font-weight: 500;
+    }
+
+    .card {        
+        background: #FFFFFF;
+        border-radius: 25px;
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+        padding: 5%;
+        margin: 4% 0%;
+    }
+
+    .blue-button {
+        align-self: center;
+    }
+
+    #modules, #back-button-cont{
+        display: flex;
+        justify-content: center;
+        margin-top: 5%;
+    }
+
+    .module {
+        display: flex;
+        flex-direction: column;
+        width: 22%;
+        margin: 0% 3%;
+        text-align: center;
+        justify-content: center;
+        padding: 5% 2%;
+        margin-top: 2%;
+    }
+    .module-h {
+        margin-bottom: 10%;
+    }
+
+    .mCont {
+        padding-top: 4%;
+        padding-bottom: 4%;
+        border-bottom: 0.5px solid lightgray;
+    }
+
+    .mDesc {
+        text-align: justify;
+        font-weight: 300;
+    }
+
+    .tips-li {
+        display: flex;
+        margin-top: 2%;
+    }
+
+    #vd {
+        display: flex;
+        justify-content: center;
+    }
+
+    .vd-chart {
+        margin: 0% -40px;
+    }
+
+    #vd-text-mc {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        padding-top: 5%;
+        margin-right: -4%;
+        z-index: 1;
+    }
+
+    #vd-text-oc {
+        display: flex;        
+        flex-direction: column;
+        justify-content: end;     
+        padding-bottom: 5%;   
+        margin-left: -4%;
+        z-index: 1;
+    }
+
+    .mDetails {
+        max-height: none;
+    }
+
+    .m-result {
+        width: 30%;
+        padding: 3%;
+        margin: 0% 3%;
+    }
+
+    .quote {
+        font-size: 2rem;
+        padding-right: 20%;
+        text-align: center;
+        font-weight: 200;
+    }
+
+    #contact-us {
+        color: var(--bright-blue);
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    #contact-us:hover {
+        color: var(--dark-blue);
+    }
+</style>
+
+<body>
+    <!-- Navbar -->
+    <header class="z-10">
+        <%- include ('../../partials/nav.ejs') %>
+    </header>
+    
+    <!-- Body -->
+    <div class="body">
+        <!-- Module -->
+        <div class="w-full mx-auto bg-white mt-24">
+            <!-- Text -->
+            <div class="textBox text-center">
+                <h2 class="">Your business is</h2>
+                <h2 id="bussiness-cat" class="blue-text"><%= business_category.category %></h2>    
+            </div>
+            
+            <!-- Venn diagram -->
+            <div id="vd" class="mt-10">
+                <!-- market creation -->
+                <div id="vd-text-mc">
+                    <p >Market Creation</p>
+                </div>
+                <div id="vd-mc" class="vd-chart"></div>              
+                <!-- organisational change -->
+                <div id="vd-oc" class="vd-chart"></div> 
+                <div id="vd-text-oc">
+                    <p>Organisational Change</p>
+                </div>             
+            </div>               
+
+            <!-- Cards -->
+            <div id="modules">
+            <% for (m in modules) { %>
+                <div id="card-1" class="card module">
+                    <!-- heading -->
+                    <div class="module-h">
+                        <h3 class="blue-text"><%= modules[m].name %></h3>
+                    </div>
+                    <!-- button -->
+                    <div class="blue-button w-1/2">
+                        <a href="#" class="">
+                            Click here
+                        </a>
+                    </div>
+                </div>
+            <% } %>
+                <div id="card-1" class="card module">
+                    <!-- heading -->
+                    <div class="module-h">
+                        <h3 class="blue-text">Implementation</h3>
+                    </div>
+                    <!-- button -->
+                    <div class="blue-button w-1/2">
+                        <a href="#" class="">
+                            Click here
+                        </a>
+                    </div>
+                </div>
+            </div>            
+        
+        <!-- Desciption -->        
+        <div class="mt-24">
+            <h2 class="">What is <%= business_category.category %> ?</h2>
+            <p class="mt-10 horizontal-margin"><%= business_category.desc %></p>
+        </div>
+
+        <!-- Tips -->
+        <div id="" class="card tips horizontal-margin">
+            <h3 class="">Steps to improve your Business:</h3>                                               
+            <ol class="list-decimal mt-5 ml-10">
+                <% business_category.improvements.split(';').forEach((li) => { %>
+                    <li class="mt-5"><p><%= li %></p></li>
+                <% }); %>
+            </ol>                        
+        </div>
+
+        <% for (m in modules) { %>
+        <!-- Module Details Dropdown -->
+        <div class="">
+            <!-- Dropdown -->
+            <div class="mCont">
+                <button data-collapse-toggle="more-details-<%= modules[m].code %>" type="button" class="text-lg text-black font-medium inline-flex w-full justify-between py-6">                             
+                    <div class="mDesc">                       
+                        <h2 class="blue-text mTopic"><%= modules[m].name %></h2> 
+                        <div id="pb-<%= modules[m].code %>" class="mt-16"></div>                        
+                        <p class="horizontal-margin"><%= scores[modules[m].code].mScore.desc %></p>
+                    </div>                   
+                    <!-- Dropdown button -->
+                    <span class="">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </span>
+                </button>
+
+                <!-- Module Details -->
+                <div id="more-details-<%= modules[m].code %>" class="m-details w-full mb-10 pb-5 mx-auto bg-white hidden overflow-y-auto transition-all duration-5000 ease-in-out">                                                            
+
+                    <!-- Steps to improve -->
+                    <div id="" class="card horizontal-margin">                        
+                        <h3 class="">Steps to improve your <%= modules[m].name %>:</h3>                                               
+                        <ol class="list-decimal mt-5 ml-10">
+                            <% scores[modules[m].code].mScore.improvements.split(';').forEach((li) => { %>
+                                <li class="mt-5"><p><%= li %></p></li>
+                            <% }); %>
+                        </ol>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }; %>
+
+        <!-- Implementation -->
+        <div id="implementation" class="mt-16">
+            <h2 class="blue-text">So What's Next?</h2>
+            <div class="double-col mt-16">
+                <div class="col w-1/3">
+                    <span class="quote blue-text">"Action speaks louder than words"</span>
+                </div>
+                <div class="col w-2/3">
+                    <h5>We are here to help you improve your business</h5>
+                    <p class="mt-5">If you have questions about this assessment, want to develop a bespoke CE-MAP framework through our CIRCLE program or need support to implement assessment recommendations, please feel free to contact our CE research team. We're here to support your journey towards a more circular and sustainable future.</p>
+                    <a href="/" id="contact-us" class="mt-5">Contact Us</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- button -->
+        <div id="back-button-cont">
+            <div class="blue-button w-1/4">
+                <a href="#" class="">
+                    Go back to home
+                </a>
+            </div>
+        </div>
+
+        <div id="chart"></div>
+        
+    </div>
+</body>
+</html>
+
+<script type='text/javascript'> 
+// Retrieve data from server
+let modules = JSON.parse('<%= JSON.stringify(modules) %>'.replace(/&#34;/g, '"'));
+let data = JSON.parse('<%= JSON.stringify(data) %>'.replace(/&#34;/g, '"'));
+let scores = JSON.parse('<%= JSON.stringify(scores) %>'.replace(/&#34;/g, '"'));
+let cat = JSON.parse('<%= JSON.stringify(cat) %>'.replace(/&#34;/g, '"'));
+console.log(modules);
+console.log(data);
+console.log(scores);
+
+window.onload = function() {
+    // Overall result -> Venn diagram
+    for (const m in scores) {
+        // Init
+        let mScore = scores[m].mScore.label
+        let maxScore = 6; 
+
+        // Module score
+        let mScoreAggregate = 0;
+        for (q in scores[m].qScores) {
+            mScoreAggregate += scores[m].qScores[q].label
+        }     
+        let mScorePercentage = parseInt(mScoreAggregate/6*100);
+        
+        // Venn diagram
+        insertVennRadialChart(`vd-${m}`, cat[mScore]['label'], cat[mScore]['color'], '#00000000', '300px', '85%', cat[mScore]['color2']+'7F', mScorePercentage)        
+
+        // Question radial chart
+        insertHalfRadialChart(`hrc-${m}`, cat[mScore]['label'], cat[mScore]['color'], cat[mScore]['color2'], '100%', '50%', mScorePercentage)
+
+        // Progress chart
+        let pbCont = document.getElementById(`pb-${m}`)
+        pbCont.appendChild(createProgressChart(20, 'you are here', 30, 40, 30))
+    }
+}
+</script>

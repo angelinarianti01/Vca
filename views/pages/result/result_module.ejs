@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="/js/script.js"></script>
-    <title>Quiz page</title>
+    <title>Survey page</title>
 </head>
 
 <style>
@@ -38,12 +38,17 @@
         margin: 4% 0%;
     }
 
+    .more-details {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
 </style>
 
 <body>
     <!-- Navbar -->
     <header class="z-10">
-        <%- include ('../partials/nav.ejs') %>
+        <%- include ('../../partials/nav.ejs') %>
     </header>
     <!-- Body -->
     <div class="body mt-16">
@@ -73,19 +78,18 @@
     
         <!-- Desciption -->
         <div class="mt-16">
-            <p class=""><strong>Your Enabling Environment is at a latent stage.</strong> This means that the infrastructure and support mechanisms for transitioning to a circular economy within your sector are in the early stages of development. There may be limited regulatory frameworks, financial incentives, and knowledge-sharing platforms to encourage circular practices. Businesses in your sector might be less aware of circularity and its potential benefits.</p>
+            <p class=""><%= scores.mScore.desc %></p>
         </div>
 
         <!-- Tips -->
         <div id="tips" class="card tips">
             <!-- heading -->
-            <p class="text-slate-900 text-1xl font-medium mx-auto">Steps to Improve your Financial Mechanism !</p>
+            <h2 class=""><span class="blue-text">Steps to Improve your </span><%= module.name %>:</h2>
             <!-- list of tips -->
-            <p>Things to improve</p>
-            <ol class="list-decimal">
-                <li><strong>Enhance Regulatory Frameworks:</strong> To progress towards circularity, there is a need to develop and implement regulatory frameworks that encourage circular practices. These regulations should promote circular design, sustainable material management, and responsible product lifecycle management.</li>
-                <li><strong>Expand Financial Support:</strong> To incentivise circular transitions, consider introducing circular subsidies, tax credits, and grants targeting businesses looking to adopt circular business models and practices. Ensure that these financial mechanisms are accessible and well-publicized.</li>
-                <li><strong>Promote Knowledge Sharing:</strong> Foster collaboration and knowledge-sharing platforms connecting experts, academics, and industry professionals. These platforms should facilitate the exchange of best practices, insights, and case studies related to circularity within your sector</li>
+            <ol class="list-decimal mt-5 ml-10">
+                <% scores.mScore.improvements.split(';').forEach((li) => { %>
+                    <li class="mt-5"><p><%= li %></p></li>                  
+                <% }); %>                
             </ol>            
         </div>
 
@@ -107,10 +111,20 @@
                     </span>
                 </button>
                 <!-- Details -->
-                <div id="more-details-<%= q %>" class="pt-3 mt-3 space-y-2 hidden">
-                  <p class="d2-heading text-center">in this case, you are emerging</p>
-                  <div id="d2-pb"></div>
-                  <p id="d2-desc">Your Enabling Environment is at a mature stage in Standardisation and Regulation. Since 2015, robust and comprehensive circular standards and rules have been implemented, promoting circular processes, packaging, and accounting. These standards and rules are enforced by industry associations and backed by government regulations and laws. This signifies a well-established framework for advancing circular practices. Your organisation operates in an environment where circularity is encouraged and legally mandated. Leveraging this mature regulatory landscape to drive your circular initiatives and remain compliant with existing standards is crucial.</p>
+                <div id="more-details-<%= q %>" class="more-details pt-3 mt-3 space-y-2 hidden">
+                    <div id="d2-pb"></div>
+                    <p id="d2-desc"><%= scores.qScores[q].desc %></p>
+                    <!-- Tips -->
+                    <div id="tips" class="card tips">
+                        <!-- heading -->
+                        <h2 class=""><span class="blue-text">Steps to Improve your </span> <%= scores.qScores[q].topic %>:</h2>
+                        <!-- list of tips -->
+                        <ol class="list-decimal mt-5 ml-10">
+                            <% scores.qScores[q].improvements.split(';').forEach((li) => { %>
+                                <li class="mt-5"><p><%= li %></p></li>
+                            <% }); %>
+                        </ol>            
+                    </div>
                 </div>
               </div>
         </div>
@@ -118,8 +132,8 @@
 
         <!-- button -->
         <div class="buttons mt-10 text-center">
-            <a href="#" class="px-6 py-5 mt-10 bg-transparent border-gray-900 border rounded-full text-gray-900 hover:bg-gray-900 hover:text-white">
-                Go back to home
+            <a href="/">
+                <button class="blue-button w-1/4">Go back to home</button>
             </a>
         </div>
         
@@ -153,7 +167,7 @@ window.onload = function() {
     }
 
     // Module result -> Half radial chart  
-    let mScore = scores.mScore;
+    let mScore = scores.mScore.label;
     let maxScore = 6; 
     let mScorePercentage = parseInt(mScore/maxScore*100);
     insertHalfRadialChart('hrc', cat[mScore]['label'], cat[mScore]['color'], cat[mScore]['color2'], '100%', '50%', mScorePercentage)

@@ -1,4 +1,5 @@
-// Excel Spreadsheet
+// Load req
+const fs = require('fs');
 const ExcelJS = require('exceljs');
 const workbook = new ExcelJS.Workbook();
 
@@ -38,6 +39,70 @@ const conditionalFetchRow2 = function (data, conditionalKey, conditionalValue, t
   const item = data.find(item => item[conditionalKey] === conditionalValue);
   return item ? item : null;
 }
+
+const twoConditionalFetchCell2 = function (data, conditionalKey1, conditionalValue1, conditionalKey2, conditionalValue2, targetKey) {  
+  const item = data.find(item => item[conditionalKey1] === conditionalValue1 && item[conditionalKey2] === conditionalValue2);
+  return item ? item[targetKey] : null;
+}
+
+const insertRowIntoCSV = (filePath, jsonData) => {
+  return new Promise((resolve, reject) => {
+      // Read csv
+      let csvData = '';
+      if (fs.existsSync(filePath)) {
+          csvData = fs.readFileSync(filePath, 'utf-8');
+      }
+
+      // Get headers
+      const existingHeaders = csvData.trim().split('\n')[0].split(',');
+
+      // Match json data with corresponding header
+      const csvRowValues = existingHeaders.map(header => {          
+          return jsonData.hasOwnProperty(header.trim()) ? `"${jsonData[header.trim()]}"` : '""';
+      });
+
+      // Append new row
+      fs.appendFile(filePath, `${csvRowValues.join(',')}\n`, 'utf-8', (err) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve('JSON data added as a new row successfully.');
+          }
+      });
+  });
+};
+
+const insertRowIntoCSVWithId = (filePath, jsonData) => {
+  return new Promise((resolve, reject) => {
+      // Read existing CSV data if the file exists
+      let headers = [];
+      if (fs.existsSync(filePath)) {
+          const content = fs.readFileSync(filePath, 'utf-8');
+          headers = content.trim().split('\n')[0].split(',');
+      }
+      
+      // Create id
+      const id = new Date().getTime();      
+      jsonData['id'] = id
+
+      // Map JSON data based on CSV headers
+      const csvRowValues = headers.map(header => {
+          const value = jsonData.hasOwnProperty(header.trim()) ? `"${jsonData[header.trim()]}"` : '""';
+          return value;
+      }).join(',');
+
+      console.log(csvRowValues)
+
+      // Append the new row to the CSV file
+      fs.appendFile(filePath, `${csvRowValues}\n`, 'utf-8', (err) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve(id);
+          }
+      });
+  });
+};
 
 const conditionalFetchCell = (fileName, sheet, conditionalColumn, conditionalValue, targetColumn) => {
   try {    
@@ -336,9 +401,12 @@ const postModuleResult = (fileName, module, name, email, answerArray, questionSc
 }
 
 module.exports = {
-  loadExcelAsArray,
+  loadExcelAsArray,  
   conditionalFetchCell2,
+  twoConditionalFetchCell2,
   conditionalFetchRow2,
+  insertRowIntoCSV,
+  insertRowIntoCSVWithId,
   conditionalFetchCell,
   twoConditionalFetchCell,
   conditionalFetchRow,

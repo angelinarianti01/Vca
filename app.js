@@ -1,11 +1,14 @@
 // Imports
 const express = require('express')
 const bodyParser = require('body-parser');
+const path = require('path');
+const fs = require('fs');
+const archiver = require('archiver');
 const app = express()
 const port = 5000
-const path = require('path');
 
-const { loadExcelAsArray, conditionalFetchCell2, conditionalFetchRow2, conditionalFetchCell, jsonConditionalFetchCell, conditionalFetchRows, conditionalFetchRow, postModuleResult, insertRowToExcel, twoConditionalFetchCell } = require('./data')
+const { loadExcelAsArray, conditionalFetchCell2, twoConditionalFetchCell2, conditionalFetchRow2, insertRowIntoCSV, insertRowIntoCSVWithId } = require('./data')
+const {  addDescription, scoreAndSave } = require('./processor')
 
 // Init
 const cat = {
@@ -40,24 +43,16 @@ app.use(express.static('public'));
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
+app.listen(port, () => console.info(`App listening on port ${port}`))
+
 // Navigation
-// 1. Home 
 app.get('', async (req, res) => {
-    const data = await loadExcelAsArray('./data/modules.xlsx', 'modules')
-    const result = await conditionalFetchCell2(data, 'name', 'Enabling Environment', 'code')
-    const row = await conditionalFetchRow2(data, 'name', 'Enabling Environment', 'code')
-    console.log(row)
-    res.render('pages/index', { text: 'Hey' })
+    res.render('pages/index')
 })
-// 2. About 
-app.get('/about', (req, res) => {
-    res.render('pages/about', { text: 'Hey' })
+app.get('/contact', (req, res) => {
+    res.render('pages/contact')
 })
-// 3. Quiz: Enabling Environment, Market Creation, Organisational Change
-app.get('/quiz', (req, res) => {  
-    res.render('pages/quiz', { data: [...data.mc, ...data.oc], module:'market_creation,organisational_change'})
-})
-app.get('/quiz/:module', (req, res) => {      
+app.get('/survey/:module', (req, res) => {      
     let module = req.params.module;
     let desc = '';
 
@@ -78,10 +73,10 @@ app.get('/quiz/:module', (req, res) => {
     }
 
     // Get module data
-    res.render('pages/start_quiz', { module: module, desc: desc})
+    res.render('pages/start_survey', { module: module, desc: desc})
 })
 
-app.post('/quiz/:module/start', async (req, res) => {
+app.post('/survey/:module/start', async (req, res) => {
     try {    
         // Init user data
         let userData = {};
@@ -135,7 +130,13 @@ app.post('/quiz/:module/start', async (req, res) => {
         userData['name'] = firstName + ' ' + lastName
 
         // Write user data
-        let userInsert = await insertRowToExcel('./data/result.xlsx', 'user', userData)
+        let userInsert; 
+
+        insertRowIntoCSVWithId('./data/result/user.csv', userData)
+            .then(id => {
+                userInsert = id;
+            })
+            .catch(error => console.error(error));
 
         // Fetch modules
         let params = req.params.module.replaceAll('_', ' ');
@@ -144,12 +145,9 @@ app.post('/quiz/:module/start', async (req, res) => {
         let module = await loadExcelAsArray('./data/modules.xlsx', 'modules')
         module = module.filter(function(m) {return m.name.toLowerCase() == params})[0]
 
-
         // Load questions
         let questions = await loadExcelAsArray('./data/modules.xlsx', 'questions')     
         questions = questions.filter(function(q) {return module['id'].includes(q.module)}) 
-
-        console.log(questions)
 
         // Load question attr
         let sub_questions = await loadExcelAsArray('./data/modules.xlsx', 'sub_questions')
@@ -164,9 +162,9 @@ app.post('/quiz/:module/start', async (req, res) => {
             questions[i]['q_options'] = qOptions.filter(function(o) {return o.question == questions[i].id})            
             // sq options
             questions[i]['sq_options'] = sqOptions.filter(function(o) {return o.question == questions[i].id})
-        }
+        }        
 
-        res.render('pages/quiz', { module:module, data: questions, userId: userInsert})
+        res.render('pages/survey', { module:module, data: questions, userId: userInsert})
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('An error occurred.');
@@ -174,49 +172,49 @@ app.post('/quiz/:module/start', async (req, res) => {
 });
 
 app.post('/result/market_creation_and_organisational_change', async (req, res) => {
-    // Init variables    
-    let modules = {};
-    let data = {};
-    let userData = {};
+    // Load data
+    let questionsModules = await loadExcelAsArray('./data/modules.xlsx', 'questions')
+    let subquestionsModules = await loadExcelAsArray('./data/modules.xlsx', 'sub_questions')
+    questionsModules.push(...subquestionsModules)
+
+    // Init variables
+    let modules = {
+        'm2': { id: 'm2', name: 'Market Creation', code: 'mc' },
+        'm3': { id: 'm3', name: 'Organisational Change', code: 'oc' }
+    };
+    let data = {
+        'm2': {}, 'm3': {}
+    };
+    let userId = {};
     let scores = {};
     
     // Parse through request form
-    for (const q in req.body) {
-        // Get module
-        if (q == 'module') {
-            let module = JSON.parse(req.body[q]);            
-            modules['m2'] = { id: 'm2', name: 'Market Creation', code: 'mc' }
-            modules['m3'] = { id: 'm3', name: 'Organisational Change', code: 'oc' }
-        }
+    for (const q in req.body) {  
+        
         // Get user data
-        else if (q == 'userData') {               
-            userData = JSON.parse(req.body[q])
+        if (q == 'userId') {            
+            userId = req.body[q];
         }
         // Get answers
-        else {
-            data[q] = JSON.parse(req.body[q]);          
+        else if (q.startsWith('q') || q.startsWith('sq')) {            
+            
+            // Get question's module
+            let m = conditionalFetchCell2(questionsModules, 'id', q.toString(), 'module')            
+            
+            // Assign to specific modules
+            if (data[m]){
+                data[m][q] = JSON.parse(req.body[q])
+            }   
         }
     }  
 
     // Loop through modules
-    for (const m in modules) { 
-
-        // Get module questions
-        let mData = {};
-        for (const d in data) {
-            // Get question module
-            let q = data[d].question
-            let qMod = await conditionalFetchCell('./data/modules.xlsx', 'questions', 'id', q, 'module')
-
-            // Check question module
-            if (qMod == modules[m].id) {
-                // Append
-                mData[d] = data[d];
-            }
-        }
+    for (let m in modules) { 
 
         // Evaluate module scores
-        scores[modules[m].code] = await scoreAndSave(modules[m],mData,userData);
+        scores[modules[m].code] = await scoreAndSave(modules[m],data[m],userId);
+        scores[modules[m].code] = await addDescription(scores[modules[m].code])
+
     }
 
     console.log('modules is ')
@@ -224,32 +222,43 @@ app.post('/result/market_creation_and_organisational_change', async (req, res) =
     console.log('data is')
     console.log(data)
     console.log('scores is')
-    console.log(scores.mc.qScores)
+    console.log(scores['mc'])
+    console.log(scores['oc'])
 
     // Get overall result
-    let mc_result = scores.mc.mScore;
-    let oc_result = scores.oc.mScore;
-    let business_category = await twoConditionalFetchCell('./data/scoring.xlsx', 'final_result', 'mc', mc_result, 'oc', oc_result, 'business_categories')
+    let overall_results = await loadExcelAsArray('./data/scoring.xlsx', 'final_result')
+    let overall_results_desc = await loadExcelAsArray('./data/scoring.xlsx', 'overall_result_desc')
+    console.log(overall_results_desc)
+    let mc_result = scores.mc.mScore.label;
+    let oc_result = scores.oc.mScore.label;    
+    let business_category = {}
+    business_category = {}
+    business_category.category = await twoConditionalFetchCell2(overall_results, 'mc', mc_result, 'oc', oc_result, 'business_categories');
+    business_category.desc = await conditionalFetchCell2(overall_results_desc, 'type', business_category.category, 'desc');
+    business_category.improvements = await conditionalFetchCell2(overall_results_desc, 'type', business_category.category, 'improvements');
+    
+    console.log('business cat is');
+    console.log(business_category)
     
     // Insert to overall
-    insertRowToExcel('./data/result.xlsx', 'all', {
-        ...userData,
+    await insertRowIntoCSV('./data/result/market_creation_and_organisational_change.csv', {
+        'user_id': userId,
         'mc_result': mc_result,
         'oc_result': oc_result,
         'business_category': business_category
-    }) 
+    })
 
-
-    console.log('business category is')
-    console.log(business_category)
-
-    res.render('pages/result_all', { modules: modules, data: data, scores: scores, business_category:business_category, cat:cat})
+    res.render(
+        'pages/result/result_all', 
+        { modules: modules, data: data, scores: scores, business_category:business_category, cat:cat}
+    )
 })
 
 app.post('/result', async (req, res) => {
     // Init variables
     console.log(req.body)
     let module;
+    let result;
     let data = {};
     let scores = {};
     let userId = {};
@@ -269,6 +278,7 @@ app.post('/result', async (req, res) => {
     }       
 
     scores = await scoreAndSave(module, data, userId);
+    scores = await addDescription(scores)
 
     console.log('modules is ')
     console.log(module)
@@ -279,139 +289,54 @@ app.post('/result', async (req, res) => {
     console.log('scores is')
     console.log(scores)
     
-    res.render('pages/result_module', { module: module, data: data, scores: scores, cat: cat})
+    res.render('pages/result/result_module', { module: module, data: data, scores: scores, cat: cat})
 })
+
 // Get csv result
-app.get('/result/excel', (req,res) => {
-    console.log(req)
-    const filePath = path.join(__dirname, 'data', 'result.xlsx');
+app.get('/downloadCSV', (req, res) => {
+    const zip = archiver('zip'); // Create a new zip archive
 
-    // Send the file as a response
-  res.sendFile(filePath, (err) => {
-    if (err) {
-        // Handle errors, such as the file not existing
-        console.error(err);
-        res.status(err.status || 500).send('File not found');
-    } else {
-        console.log('File sent successfully')        
-    }
-  });
-});
-// Test page
-app.get('/test', (req, res) => {
-    res.render('test3', { text: 'Hey' })
-})
-app.get('/test2', (req, res) => {
-    res.render('test2', { text: 'Hey' })
-})
-app.get('/test4', (req, res) => {
-    res.render('test4', { text: 'Hey' })
-})
-
-app.listen(port, () => console.info(`App listening on port ${port}`))
-
-
-
-const scoreAndSave = async(module, data, userData) => {
-    // Get sheetname        
-    let moduleSheet =  module.name.replace(' ', '_').toLowerCase()
-
-    // Load scores
-    const scoring = loadExcelAsArray('./data/scoring.xlsx', moduleSheet)
-
-    // Calculate question score
-    let qScores = await calculateQScores(data, scoring);       
-
-    // Get insert row
-    let insertRow = await getInsertRow(module, data, qScores);
-
-    // Add user data
-    for (ud in userData) {
-        insertRow[ud] = userData[ud];
-    }
-
-    // Get module details 
-    console.log(insertRow[`${module.code}_result`])
-    let mScore = insertRow[`${module.code}_result`]
-
-    console.log('insert row is')
-    console.log(insertRow)
-
-    // Insert to result excel
-    insertRowToExcel('./data/result.xlsx', moduleSheet, insertRow) 
-    
-
-    return {qScores, mScore};
-}
-
-
-const getInsertRow = async (module, answers, qScores ) => {    
-    // Init row
-    let moduleSheet =  module.name.replace(' ', '_').toLowerCase()
-    let insertRow = {};
-
-    // Get anwers
-    for (const a in answers) {        
-        // Assign to json object
-        insertRow[a] = answers[a].option;
-    }      
-
-    // Get module score and save
-    let moduleScore = 0;
-
-    // Aggregste question score
-    for (q in qScores) {
-        moduleScore += qScores[q].label;
-    }
-  
-    // Get label from score
-    insertRow[`${module.code}_result`] = await conditionalFetchCell('./data/scoring.xlsx', moduleSheet.toString(), 'score_values', moduleScore.toString(), 'label');      
-
-    return insertRow 
-}
-
-const calculateQScores = async (answers, scoring) => {
-    // Init result
-    let result = {};
-
-    // Loop through answers
-    for (const q in answers) {
-        // Count score
-        let qid =answers[q].question
-        if (result.hasOwnProperty(qid)) {
-            // Aggregate
-            result[qid]['score'] += answers[q].score            
+    // Add files to the zip archive
+    const files = [
+        {
+            filePath: path.join(__dirname, './data/result/user.csv'),
+            fileName: 'user.csv'
+        },
+        {
+            filePath: path.join(__dirname, './data/result/enabling_environment.csv'),
+            fileName: 'enabling_environment.csv'
+        },
+        {
+            filePath: path.join(__dirname, './data/result/market_creation.csv'),
+            fileName: 'market_creation.csv'
+        },
+        {
+            filePath: path.join(__dirname, './data/result/organisational_change.csv'),
+            fileName: 'organisational_change.csv'
+        },
+        {
+            filePath: path.join(__dirname, './data/result/market_creation_and_organisational_change.csv'),
+            fileName: 'market_creation_and_organisational_change.csv'
         }
-        else {
-            // Initiate
-            result[qid] = {};
-            result[qid]['score'] = 0;
-        }        
-    }
+    ];
 
-    // Add info to scores
-    for (q in result) {
-        // Get topic
-        let topic = await conditionalFetchCell('./data/scoring.xlsx', 'question_scores_range', 'question', q, 'topic');
-        result[q]['topic'] = topic;
+    // Pipe the zip archive to the response object
+    zip.pipe(res);
 
-        // Get maximum score
-        let maxScore = await conditionalFetchCell('./data/scoring.xlsx', 'question_scores_range', 'question', q, 'max_score')
-        result[q]['maxScore'] = maxScore + 1 // Count '0'
+    // Add each file to the zip archive
+    files.forEach(file => {
+        if (fs.existsSync(file.filePath)) {
+            zip.append(fs.createReadStream(file.filePath), { name: file.fileName });
+        }
+    });
 
-        // Get lem score
-        let lemRange = await conditionalFetchCell('./data/scoring.xlsx', 'question_scores_range', 'question', q, 'lem_range')
-        lemRange = lemRange.split(',')
+    // Finalize the zip archive
+    zip.finalize();
 
-        // Assign portion to score
-        result[q]['latent'] = parseInt(lemRange[0]) + 1 // '0' is not counted
-        result[q]['emerging'] = parseInt(lemRange[1])  - parseInt(lemRange[0])
-        result[q]['mature'] = parseInt(lemRange[2])  - parseInt(lemRange[1])
-
-        // Get score label / classification
-        let label = await conditionalFetchCell('./data/scoring.xlsx', 'question_scores_range', 'question', q, result[q]['score'])
-        result[q]['label'] = label   
-    }    
-
-    return result;
-}
+    // Handle errors during zip finalization
+    zip.on('error', err => {
+        console.error('Error finalizing zip archive:', err);
+        res.status(500).send('Internal Server Error');
+    });
+})
+  

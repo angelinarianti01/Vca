@@ -6,17 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style/main.css">    
     <script src="https://cdn.tailwindcss.com"></script>    
-    <title>Quiz page</title>
+    <title>Take a Survey</title>
 </head>
 <style>
+    #pb-outer{
+        position: fixed;
+        bottom: 0%;
+    }
 
-label {
-    columns: red;
-}
+    #pb {
+        background-image: linear-gradient(to right, var(--dark-blue), #a9cae4);  
+    }
 
-.card {
-    padding: 5%;
-}
+    label {
+        columns: red;
+    }
+
+    .card {
+        padding: 5%;
+    }        
 
 </style>
 <body>
@@ -26,15 +34,15 @@ label {
     </header>
 
     <!-- Progress bar -->
-    <div class="w-full bg-gray-200 h-4 flex items-center mt-24">
-        <div id="pb" class="bg-[#8BA9AD] h-full rounded-r-lg transition-all ease-out duration-1000"></div>
+    <div id="pb-outer" class="w-full bg-gray-200 h-6 flex items-center">
+        <div id="pb" class="h-full rounded-r-lg transition-all ease-out duration-1000"></div>
         <span id="pb-label" class="-ml-10 text-xs text-black font-medium"></span>
     </div>
 
     <!-- Body -->
     <div class="body">        
-        <!-- Quiz -->    
-        <form id="quiz" <% if (module.id=='m2m3') { %>action="/result/market_creation_and_organisational_change"<% } else { %>action="/result"<% } %> method="post">
+        <!-- Survey -->    
+        <form id="survey" <% if (module.id=='m2m3') { %>action="/result/market_creation_and_organisational_change"<% } else { %>action="/result"<% } %> method="post">
             <!-- Hidden input: Which module -->
             <input type="hidden" name="module" value="<%= JSON.stringify(module) %>">  
             <input type="hidden" name="userId" value="<%= JSON.stringify(userId) %>">  
@@ -76,6 +84,8 @@ const createModuleBox = (id, heading) => {
 
     const h2 = document.createElement("h2");
     h2.textContent = heading;
+    h2.style.marginTop = '6%';
+    h2.classList.add('blue-text');
     // Heading style here
     cont.appendChild(h2);
 
@@ -124,24 +134,61 @@ const createRadioLabel = (id, className, label, name, value) => {
   radioOptionInput.id = id;
   radioOptionInput.name = name;
   radioOptionInput.value = value;
-  radioOptionInput.className = "h-6 w-6 text-blue-600 rounded-full focus:ring-2 focus:ring-blue-400";
+  radioOptionInput.style.display = 'none'
 
-  const radioOptionText = document.createElement("span");
-  radioOptionText.className = "ml-2";
+  const radioOptionCircle = document.createElement("p");
+  radioOptionCircle.classList = 'optionCircle';  
+  radioOptionCircle.style.width = '18px';
+  radioOptionCircle.style.height = '18px';
+  radioOptionCircle.style.border = '2px solid var(--medium-blue)';
+  radioOptionCircle.style.borderRadius = '50%';
+  radioOptionCircle.style.marginRight = '10px';
+  radioOptionCircle.style.verticalAlign = 'middle';
+  
+  const radioOptionText = document.createElement("p"); 
+  radioOptionText.classList.add('optionText');
   radioOptionText.textContent = label;
 
   radioOptionLabel.appendChild(radioOptionInput);
+  radioOptionLabel.appendChild(radioOptionCircle);
   radioOptionLabel.appendChild(radioOptionText);
 
   return radioOptionLabel
 }
 
+function attachRadioListeners(id, qId) {
+    console.log(id)
+    const radioOptionInput = document.getElementById(id)
+
+    // Uncheck all other radio inputs with the same name attribute
+    const radioInputs = document.querySelectorAll('input[name="' + radioOptionInput.name + '"]');
+    radioInputs.forEach(input => {
+        if (input !== radioOptionInput) {
+            input.checked = false;
+            const circle = input.nextElementSibling;
+            circle.style.border = '2px solid var(--medium-blue)';
+        }
+    });
+
+    console.log(radioOptionInput)
+
+    const circle = radioOptionInput.nextElementSibling;
+
+    if (radioOptionInput.checked) {
+        circle.style.border = '5px solid var(--medium-blue)';
+    } else {
+        circle.style.border = '2px solid var(--medium-blue)';
+    }
+}
+
 window.onload = function() {
     console.log('Page has fully loaded');
     console.log(module);
+
+    showNav();
     
     // Get container
-    const quiz = document.getElementById('quiz');
+    const survey = document.getElementById('survey');
     
     // Analyse module
     if (module['id'] == 'm2m3') {
@@ -151,8 +198,8 @@ window.onload = function() {
 
         // Insert
         const submit = document.getElementById('submit');
-        quiz.insertBefore(moduleBox1, submit);
-        quiz.insertBefore(moduleBox2, submit);
+        survey.insertBefore(moduleBox1, submit);
+        survey.insertBefore(moduleBox2, submit);
     }
     else {
         // Create module
@@ -160,7 +207,7 @@ window.onload = function() {
         
         // Insert
         const submit = document.getElementById('submit');
-        quiz.insertBefore(moduleBox, submit);
+        survey.insertBefore(moduleBox, submit);
     }
 
     // Loop through questions
@@ -176,9 +223,13 @@ window.onload = function() {
         
         // Loop through options
         q.q_options.forEach(o => {            
-            // Create option label                
-            radioButtonsGroup.appendChild(createRadioLabel(o.id, 'qOptions', o.option, q.id, JSON.stringify(o)))            
-        })
+            // Create label
+            const radioLabel = createRadioLabel(o.id, 'qOptions', o.option, q.id, JSON.stringify(o));
+            radioLabel.querySelector('input[type="radio"]').required = true;
+
+            // Append 
+            radioButtonsGroup.appendChild(radioLabel);
+        })        
 
         // Append to box
         qBox.appendChild(radioButtonsGroup);
@@ -191,7 +242,7 @@ window.onload = function() {
         q.q_options.forEach(o => {
             // Get elements
             let option = document.getElementById(o.id);
-            let text = option.parentNode.querySelector('span').textContent;            
+            let text = option.parentNode.querySelector('.optionText').textContent;            
             
             // Add listener
             option.addEventListener('click', () => {
@@ -212,30 +263,70 @@ window.onload = function() {
                         let radioButtonsGroup = createRadioButtonDiv();
                         // Loop through sub options
                         q.sq_options.forEach(sqo => {
-                            console.log(sqo)
-                            // Create option label
-                            radioButtonsGroup.appendChild(createRadioLabel(sqo.id, 'sqOptions', sqo.option, sq.id, JSON.stringify(sqo)));            
-                        })
+                            // Option label
+                            const radioLabel = createRadioLabel(sq.id+'_'+sqo.id, 'sqOptions', sqo.option, sq.id, JSON.stringify(sqo));
+                            radioLabel.querySelector('input[type="radio"]').required = true;
+
+                            // Append option 
+                            radioButtonsGroup.appendChild(radioLabel);
+
+                            // Add event listener
+                            radioLabel.addEventListener('click', () => {
+                                attachRadioListeners(sq.id+'_'+sqo.id, sq.id)                     
+                            })
+
+                        });                        
                         // Append to sq box
-                        sqBox.appendChild(radioButtonsGroup);       
+                        sqBox.appendChild(radioButtonsGroup);                                                                              
                     })
+
                     
                     // Append to q box
-                    qBox.appendChild(sqBox);      
-                }
-
+                    qBox.appendChild(sqBox);                                              
+                    
+                }                
                 // If no is selected and sq is initialised
                 else if (text == 'no' && qBox.contains(sqBox)) { // 
                     // Remove sq
                     qBox.removeChild(sqBox)
-                }
+                }         
+                
+                attachRadioListeners(o.id, q.id)
 
                 // Set progress bar
                 setProgressBar(i+1, data.length);
+            
+            })              
+        })                 
 
-            })  
-        })
+        // Make it required          
+        document.querySelector(`input[name="${q.id}"]`).required = true        
     })
 };
+
+function handleRadioButtonChange() {
+    var radioButtons = document.querySelectorAll('input[type="radio"]');
+    
+    radioButtons.forEach(function(radioButton) {
+        radioButton.addEventListener('click', function() {
+            if (radioButton.checked) {
+                let id = JSON.parse(radioButton.value).id
+                let name = JSON.parse(radioButton.value).question
+
+                // console.log(.value)
+                // // Radio button is checked, perform actions here
+                var radio = document.querySelector(`input[type="radio"][id="${id}"][name="${name}"]`);
+                console.log(radio)
+                // radio.style.border = '5px solid var(--medium-blue)'
+
+                
+                // Call another function or perform any actions you need here
+                // functionName();
+            } else {
+                // Radio button is unchecked, perform actions here if needed
+            }
+        });
+    });
+}
 
 </script>
