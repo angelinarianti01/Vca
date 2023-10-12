@@ -25,6 +25,8 @@
 <style>
     nav {
         display: flex;
+        visibility: hidden;
+        z-index: 1;
         opacity: 0;
         position: fixed;
         top: 0;
@@ -39,6 +41,7 @@
     }
     .nav-show {
         opacity: 1;
+        visibility: visible;
     }
     .navMenu {
         list-style: none;

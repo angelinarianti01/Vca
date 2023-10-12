@@ -21,9 +21,6 @@
 html {
     scroll-behavior: smooth;
 }
-.body {
-    padding:5% 10%;
-}
 .padded {
     padding:8% 10%;
 }
@@ -117,6 +114,11 @@ p {
 .button a {
     font-size: 1.25em;
     font-weight: 500;
+}
+#top-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 /* Radio */

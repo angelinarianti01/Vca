@@ -40,7 +40,7 @@
     </div>
 
     <!-- Body -->
-    <div class="body">        
+    <div class="padded">        
         <!-- Survey -->    
         <form id="survey" <% if (module.id=='m2m3') { %>action="/result/market_creation_and_organisational_change"<% } else { %>action="/result"<% } %> method="post">
             <!-- Hidden input: Which module -->
@@ -53,6 +53,11 @@
             </div>
         </form>
     </div>
+    
+    <!-- Footer -->
+    <footer class="">
+        <%- include ('../partials/footer.ejs') %>
+    </footer>
       
 </body>
 </html>

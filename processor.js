@@ -56,6 +56,8 @@ const calculateMScore = async (module, qScores) => {
     // Get label from score
     return {
         module: module,
+        score: moduleScore,
+        maxScore: conditionalFetchCell2(scoring, 'id', 1, 'score_values'),
         label: await conditionalFetchCell2(scoring, 'score_values', moduleScore, 'label')
     }
     

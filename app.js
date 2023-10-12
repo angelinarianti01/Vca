@@ -14,18 +14,18 @@ const {  addDescription, scoreAndSave } = require('./processor')
 const cat = {
     0: {
         'label': 'Latent',
-        'color': '#FF7456',
-        'color2': '#FFBEB0'
+        'color': 'var(--dark-red)',
+        'color2': 'RGB(255, 162, 146, 0.6)'
     },
     1: {
         'label': 'Emerging',
-        'color': '#FFE37E',
-        'color2': '#FFF1C1'
+        'color': 'var(--dark-yellow)',
+        'color2': 'RGB(255, 237, 94, 0.6)'
     },
     2: {
         'label': 'Mature',
-        'color': '#14DE9B',
-        'color2': '#BEFFC5'
+        'color': 'var(--dark-green)',
+        'color2': 'RGB(0, 220, 36, 0.6)'
     }
 }
 
@@ -119,6 +119,9 @@ app.post('/survey/:module/start', async (req, res) => {
             }
             else if (q == 'comments') {
                 userData['comments'] = req.body['comments']
+            }
+            else if (q == 'engaged_in_ce_explained') {
+                userData['engaged_in_ce_explained'] = req.body['engaged_in_ce_explained']
             }
             // Get answers
             else {

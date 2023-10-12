@@ -130,9 +130,12 @@
     </header>
     
     <!-- Body -->
-    <div class="body">
+    <div class="padded">
+        <div id="top-buttons" class="mt-10 horizontal-margin">
+            <img id="print-button" src="/icons/print.svg" alt="Print page">
+        </div>
         <!-- Module -->
-        <div class="w-full mx-auto bg-white mt-24">
+        <div class="w-full mx-auto bg-white">
             <!-- Text -->
             <div class="textBox text-center">
                 <h2 class="">Your business is</h2>
@@ -161,108 +164,94 @@
                     <div class="module-h">
                         <h3 class="blue-text"><%= modules[m].name %></h3>
                     </div>
-                    <!-- button -->
-                    <div class="blue-button w-1/2">
-                        <a href="#" class="">
-                            Click here
-                        </a>
-                    </div>
+                    <!-- button -->                    
+                    <a href="#mCont<%= m.code %>" class="blue-button w-1/2">
+                        Click here
+                    </a>
                 </div>
             <% } %>
                 <div id="card-1" class="card module">
                     <!-- heading -->
                     <div class="module-h">
-                        <h3 class="blue-text">Implementation</h3>
+                        <h3 class="blue-text">So What's Next?</h3>
                     </div>
                     <!-- button -->
-                    <div class="blue-button w-1/2">
-                        <a href="#" class="">
-                            Click here
-                        </a>
-                    </div>
+                    <a href="#implementation" class="blue-button w-1/2">
+                        Click here
+                    </a>
                 </div>
             </div>            
         
-        <!-- Desciption -->        
-        <div class="mt-24">
-            <h2 class="">What is <%= business_category.category %> ?</h2>
-            <p class="mt-10 horizontal-margin"><%= business_category.desc %></p>
-        </div>
+            <!-- Desciption -->        
+            <div class="mt-24">
+                <h2 class="">What is <%= business_category.category %> ?</h2>
+                <p class="mt-10 horizontal-margin"><%= business_category.desc %></p>
+            </div>
 
-        <!-- Tips -->
-        <div id="" class="card tips horizontal-margin">
-            <h3 class="">Steps to improve your Business:</h3>                                               
-            <ol class="list-decimal mt-5 ml-10">
-                <% business_category.improvements.split(';').forEach((li) => { %>
-                    <li class="mt-5"><p><%= li %></p></li>
-                <% }); %>
-            </ol>                        
-        </div>
+            <!-- Tips -->
+            <div id="" class="card tips horizontal-margin">
+                <h3 class="">Steps to improve your Business:</h3>                                               
+                <ol class="list-decimal mt-5 ml-10">
+                    <% business_category.improvements.split(';').forEach((li) => { %>
+                        <li class="mt-5"><p><%= li %></p></li>
+                    <% }); %>
+                </ol>                        
+            </div>
 
-        <% for (m in modules) { %>
-        <!-- Module Details Dropdown -->
-        <div class="">
-            <!-- Dropdown -->
-            <div class="mCont">
-                <button data-collapse-toggle="more-details-<%= modules[m].code %>" type="button" class="text-lg text-black font-medium inline-flex w-full justify-between py-6">                             
+            <% for (m in modules) { %>
+            <!-- Module Details Dropdown -->
+            <div class="">
+                <!-- Dropdown -->
+                <div id="mCont<%= m.code %>" class="mCont">
                     <div class="mDesc">                       
                         <h2 class="blue-text mTopic"><%= modules[m].name %></h2> 
                         <div id="pb-<%= modules[m].code %>" class="mt-16"></div>                        
                         <p class="horizontal-margin"><%= scores[modules[m].code].mScore.desc %></p>
+                        <!-- Steps to improve -->
+                        <div id="" class="card horizontal-margin">                        
+                            <h3 class="">Steps to improve your <%= modules[m].name %>:</h3>                                               
+                            <ol class="list-decimal mt-5 ml-10">
+                                <% scores[modules[m].code].mScore.improvements.split(';').forEach((li) => { %>
+                                    <li class="mt-5"><p><%= li %></p></li>
+                                <% }); %>
+                            </ol>                        
+                        </div>
                     </div>                   
-                    <!-- Dropdown button -->
-                    <span class="">
-                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                        </svg>
-                    </span>
-                </button>
+                </div>
+            </div>
+            <% }; %>
 
-                <!-- Module Details -->
-                <div id="more-details-<%= modules[m].code %>" class="m-details w-full mb-10 pb-5 mx-auto bg-white hidden overflow-y-auto transition-all duration-5000 ease-in-out">                                                            
-
-                    <!-- Steps to improve -->
-                    <div id="" class="card horizontal-margin">                        
-                        <h3 class="">Steps to improve your <%= modules[m].name %>:</h3>                                               
-                        <ol class="list-decimal mt-5 ml-10">
-                            <% scores[modules[m].code].mScore.improvements.split(';').forEach((li) => { %>
-                                <li class="mt-5"><p><%= li %></p></li>
-                            <% }); %>
-                        </ol>                        
+            <!-- Implementation -->
+            <div id="implementation" class="mt-16">
+                <h2 class="blue-text">So What's Next?</h2>
+                <div class="double-col mt-16">
+                    <div class="col w-1/3">
+                        <span class="quote blue-text">"Action speaks louder than words"</span>
+                    </div>
+                    <div class="col w-2/3">
+                        <h5>We are here to help you improve your business</h5>
+                        <p class="mt-5">If you have questions about this assessment, want to develop a bespoke CE-MAP framework through our CIRCLE program or need support to implement assessment recommendations, please feel free to contact our CE research team. We're here to support your journey towards a more circular and sustainable future.</p>
+                        <a href="#footer" id="contact-us" class="mt-5">Contact Us</a>
                     </div>
                 </div>
             </div>
-        </div>
-        <% }; %>
 
-        <!-- Implementation -->
-        <div id="implementation" class="mt-16">
-            <h2 class="blue-text">So What's Next?</h2>
-            <div class="double-col mt-16">
-                <div class="col w-1/3">
-                    <span class="quote blue-text">"Action speaks louder than words"</span>
+            <!-- button -->
+            <div id="back-button-cont">
+                <div class="blue-button w-1/4">
+                    <a href="#" class="">
+                        Go back to home
+                    </a>
                 </div>
-                <div class="col w-2/3">
-                    <h5>We are here to help you improve your business</h5>
-                    <p class="mt-5">If you have questions about this assessment, want to develop a bespoke CE-MAP framework through our CIRCLE program or need support to implement assessment recommendations, please feel free to contact our CE research team. We're here to support your journey towards a more circular and sustainable future.</p>
-                    <a href="/" id="contact-us" class="mt-5">Contact Us</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- button -->
-        <div id="back-button-cont">
-            <div class="blue-button w-1/4">
-                <a href="#" class="">
-                    Go back to home
-                </a>
-            </div>
-        </div>
-
-        <div id="chart"></div>
-        
+            </div>  
+        </div>      
     </div>
 </body>
+
+<!-- Footer -->
+<footer id="footer" class="">
+    <%- include ('../../partials/footer.ejs') %>
+</footer>
 </html>
 
 <script type='text/javascript'> 
@@ -271,6 +260,7 @@ let modules = JSON.parse('<%= JSON.stringify(modules) %>'.replace(/&#34;/g, '"')
 let data = JSON.parse('<%= JSON.stringify(data) %>'.replace(/&#34;/g, '"'));
 let scores = JSON.parse('<%= JSON.stringify(scores) %>'.replace(/&#34;/g, '"'));
 let cat = JSON.parse('<%= JSON.stringify(cat) %>'.replace(/&#34;/g, '"'));
+let originalState = null;
 console.log(modules);
 console.log(data);
 console.log(scores);
@@ -278,26 +268,122 @@ console.log(scores);
 window.onload = function() {
     // Overall result -> Venn diagram
     for (const m in scores) {
+
+        showNav();
+
         // Init
         let mScore = scores[m].mScore.label
-        let maxScore = 6; 
-
-        // Module score
-        let mScoreAggregate = 0;
-        for (q in scores[m].qScores) {
-            mScoreAggregate += scores[m].qScores[q].label
-        }     
-        let mScorePercentage = parseInt(mScoreAggregate/6*100);
+        let mScorePercentage = scores[m].mScore.score/scores[m].mScore.maxScore*100
         
         // Venn diagram
-        insertVennRadialChart(`vd-${m}`, cat[mScore]['label'], cat[mScore]['color'], '#00000000', '300px', '85%', cat[mScore]['color2']+'7F', mScorePercentage)        
-
-        // Question radial chart
-        insertHalfRadialChart(`hrc-${m}`, cat[mScore]['label'], cat[mScore]['color'], cat[mScore]['color2'], '100%', '50%', mScorePercentage)
+        insertVennRadialChart(`vd-${m}`, cat[mScore]['label'], cat[mScore]['color'], '#ffffff', '300px', '80%', cat[mScore]['color2'], mScorePercentage)        
 
         // Progress chart
+        
         let pbCont = document.getElementById(`pb-${m}`)
-        pbCont.appendChild(createProgressChart(20, 'you are here', 30, 40, 30))
+        pbCont.appendChild(createProgressChart(mScorePercentage, `Your are ${cat[mScore]['label']}`, 1/3*100, 1/3*100, 1/3*100))
+    }
+
+    // Print
+    const printButton = document.getElementById('print-button');
+    printButton.addEventListener('click', function() {  
+        // Apply styles for print
+        const originalDisplayStyle = document.body.style.display;
+        document.body.style.display = 'block';
+
+        // Trigger print dialog
+        tidyUpPage();
+        window.print();
+
+        // Ensure that the printing operation is completed before restoring the original state
+        setTimeout(() => {
+            restoreOriginalState();
+        }, 1000); // You might need to adjust the delay based on the printing duration
+
+        // Restore original styles after printing
+        document.body.style.display = originalDisplayStyle;
+        });
+}
+
+function storeOriginalState() {
+    originalState = {
+        navElement: document.querySelector('nav').cloneNode(true),
+        cardModules: Array.from(document.querySelectorAll('.card.module')).map(element => element.cloneNode(true)),
+        buttons: Array.from(document.querySelectorAll('button')).map(element => element.cloneNode(true)),
+        footerDiv: document.getElementById('footer').cloneNode(true)
+    };
+}
+
+function tidyUpPage() {
+
+    // Store the original state if it hasn't been stored yet
+    if (!originalState) {
+        storeOriginalState();
+    }
+
+    console.log(originalState)
+
+    // Remove the <nav> element and its contents from the DOM
+    const navElement = document.querySelector('nav');
+    if (navElement) {
+        navElement.classList.remove('nav-show');
+    }
+
+    // Remove elements with class 'card module'
+    const cardModules = document.querySelectorAll('.card.module');
+    cardModules.forEach(cardModule => {
+        cardModule.remove();
+    });
+
+    // Remove all buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.remove();
+    });
+    
+    // Remove  styles from #footer element
+    const footerDiv = document.getElementById('footer');
+    footerDiv.removeAttribute('style');
+    footerDiv.removeAttribute('class');
+    removeStylesAndClassesRecursively(footerDiv);
+}
+
+function removeStylesAndClassesRecursively(element) {
+    element.removeAttribute('style');
+    element.removeAttribute('class');
+    element.childNodes.forEach(child => {
+        if (child.nodeType === 1) {
+            removeStylesAndClassesRecursively(child);
+        }
+    });
+}
+
+function restoreOriginalState() {
+    if (originalState) {
+        // Restore <nav> element
+        const currentNavElement = document.querySelector('nav');
+        currentNavElement.classList.add('nav-show');
+
+        // Restore elements with class 'card module'
+        const cardModuleContainer = document.querySelector('#modules');
+        cardModuleContainer.innerHTML = '';
+        originalState.cardModules.forEach(cardModule => {
+            cardModuleContainer.appendChild(cardModule);
+        });
+
+        // Restore buttons
+        const buttonsContainer = document.createElement('div');
+        originalState.buttons.forEach(button => {
+            buttonsContainer.appendChild(button);
+        });
+        // Add the restored buttons back to the DOM where they were removed initially
+
+        // Restore styles to #footer element
+        const currentFooterDiv = document.getElementById('footer');
+        currentFooterDiv.parentNode.replaceChild(originalState.footerDiv, currentFooterDiv);
+
+        // Reset original state after restoring
+        originalState = null;
     }
 }
 </script>

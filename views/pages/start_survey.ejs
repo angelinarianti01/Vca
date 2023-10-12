@@ -29,9 +29,13 @@
         padding-left: 4%;
     }
 
+    .moduleName {
+        font-size: 2.5rem;
+    }
+
     #module, #disclaimers {
         padding: 0% 5%;
-        padding-top: 5%;        
+        padding-top: 5%;
     }    
 
     #userForm {
@@ -83,7 +87,7 @@
         <%- include ('../partials/nav.ejs') %>
     </header>
     <!-- Hero -->
-    <div class="padded">
+    <div class="padded mt-10">
         <!-- Module -->
         <div id="module" class="card">  
             <!-- Row -->
@@ -94,7 +98,7 @@
                 </div>
                 <!-- Heading + desc -->
                 <div class="col w-3/5">
-                    <h1 class=""><%=module.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %></h1>
+                    <h2 class="blue-text moduleName"><%=module.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') %></h2>
                     <h2 id="survey" class="blue-text">Diagnostic Tool</h2>
                     <p class="mt-5"><%= desc %></p>            
                     <!-- Start survey button -->
@@ -251,7 +255,7 @@
                 </div>
 
                 <div class="question">
-                    <label for="enganged_in_ce">How did you hear about the CE-MAP tool? (select one)</label>
+                    <label for="enganged_in_ce">Have you previously engaged in circular economy initiatives within your organisation?</label>
                     <div id="enganged_in_ce" class="radioOptions">
                         <label class="radioLabel">
                             <input type="radio" name="enganged_in_ce" value="Yes" required>
@@ -262,6 +266,11 @@
                             <p>No </p>
                         </label>            
                     </div>
+                </div>
+
+                <div class="question">
+                    <label for="engaged_in_ce_explained">If yes, briefly describe your experience</label>
+                    <input type="text" id="engaged_in_ce_explained" name="engaged_in_ce_explained" placeholder="Type your explanation here">
                 </div>
 
                 <div class="question">
@@ -277,14 +286,10 @@
         </div>
     </div>
 
-
-    <!-- Body -->
-    <div class="body">
-
-
-        
-    </div>
-
+    <!-- Footer -->
+    <footer class="">
+        <%- include ('../partials/footer.ejs') %>
+    </footer>
     
 </body>
 </html>
