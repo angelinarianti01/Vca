@@ -248,7 +248,7 @@ app.post('/result/market_creation_and_organisational_change', async (req, res) =
         'user_id': userId,
         'mc_result': mc_result,
         'oc_result': oc_result,
-        'business_category': business_category
+        'business_category': business_category.category
     })
 
     res.render(
