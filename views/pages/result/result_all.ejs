@@ -165,7 +165,7 @@
                         <h3 class="blue-text"><%= modules[m].name %></h3>
                     </div>
                     <!-- button -->                    
-                    <a href="#mCont<%= m.code %>" class="blue-button w-1/2">
+                    <a href="#mCont<%= modules[m].code %>" class="blue-button w-1/2">
                         Click here
                     </a>
                 </div>
@@ -202,7 +202,7 @@
             <!-- Module Details Dropdown -->
             <div class="">
                 <!-- Dropdown -->
-                <div id="mCont<%= m.code %>" class="mCont">
+                <div id="mCont<%= modules[m].code %>" class="mCont">
                     <div class="mDesc">                       
                         <h2 class="blue-text mTopic"><%= modules[m].name %></h2> 
                         <div id="pb-<%= modules[m].code %>" class="mt-16"></div>                        
@@ -231,7 +231,7 @@
                     <div class="col w-2/3">
                         <h5>We are here to help you improve your business</h5>
                         <p class="mt-5">If you have questions about this assessment, want to develop a bespoke CE-MAP framework through our CIRCLE program or need support to implement assessment recommendations, please feel free to contact our CE research team. We're here to support your journey towards a more circular and sustainable future.</p>
-                        <a href="#footer" id="contact-us" class="mt-5">Contact Us</a>
+                        <a href="#footer" id="contact-us" class="blue-text mt-5">Contact Us</a>
                     </div>
                 </div>
             </div>
@@ -273,7 +273,7 @@ window.onload = function() {
 
         // Init
         let mScore = scores[m].mScore.label
-        let mScorePercentage = scores[m].mScore.score/scores[m].mScore.maxScore*100
+        let mScorePercentage = (scores[m].mScore.score)/(scores[m].mScore.maxScore)*100
         
         // Venn diagram
         insertVennRadialChart(`vd-${m}`, cat[mScore]['label'], cat[mScore]['color'], '#ffffff', '300px', '80%', cat[mScore]['color2'], mScorePercentage)        
@@ -281,7 +281,7 @@ window.onload = function() {
         // Progress chart
         
         let pbCont = document.getElementById(`pb-${m}`)
-        pbCont.appendChild(createProgressChart(mScorePercentage, `Your are ${cat[mScore]['label']}`, 1/3*100, 1/3*100, 1/3*100))
+        pbCont.appendChild(createProgressChart(mScorePercentage, `Your are ${cat[mScore]['label']}`, 2/7*100, 3/7*100, 2/7*100))
     }
 
     // Print

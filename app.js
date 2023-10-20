@@ -237,11 +237,12 @@ app.post('/result/market_creation_and_organisational_change', async (req, res) =
     let business_category = {}
     business_category = {}
     business_category.category = await twoConditionalFetchCell2(overall_results, 'mc', mc_result, 'oc', oc_result, 'business_categories');
-    business_category.desc = await conditionalFetchCell2(overall_results_desc, 'type', business_category.category, 'desc');
+    business_category.desc = await conditionalFetchCell2(overall_results_desc, 'type', business_category.category, 'desc');    
     business_category.improvements = await conditionalFetchCell2(overall_results_desc, 'type', business_category.category, 'improvements');
     
     console.log('business cat is');
     console.log(business_category)
+    
     
     // Insert to overall
     await insertRowIntoCSV('./data/result/market_creation_and_organisational_change.csv', {
